@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 6 36 53" role="img" aria-label="Élan"><style>
-.e{fill:#1F1E1B;clip-path:inset(0 100% 0 0);animation:r 480ms cubic-bezier(.22,1,.36,1) forwards}
-.a{fill:#8F6D2E;opacity:0;transform:translate(-8px,8px);animation:s 320ms 480ms cubic-bezier(.22,1,.36,1) forwards}
-@keyframes r{to{clip-path:inset(0 0 0 0)}}@keyframes s{to{opacity:1;transform:none}}
-@media(prefers-color-scheme:dark){.e{fill:#F3F0E8}.a{fill:#C9A66B}}
-@media(prefers-reduced-motion:reduce){.e{animation:none;clip-path:none}.a{animation:none;opacity:1;transform:none}}
-</style><path class="e" d="M0 24L6 24L6 56L0 56zM0 24L20 24L14 30L0 30zM0 37L17 37L11 43L0 43zM0 50L20 50L14 56L0 56z"/><path class="a" d="M17.4 9L25.89 9L15.89 19L7.4 19z"/></svg>

@@ -1,3 +1,13 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "framework": null,
+  "installCommand": "echo \"site statique : aucune installation\"",
+  "buildCommand": "echo \"site statique : le CSS est livré compilé (html/css/app.css)\"",
+  "outputDirectory": "html",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/expert/:token", "destination": "/expert.html" },
+    { "source": "/pro/dossiers/:id", "destination": "/pro.html" },
+    { "source": "/pro/dossiers", "destination": "/pro.html" },
+    { "source": "/pro", "destination": "/pro.html" }
+  ]
 }

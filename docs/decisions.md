@@ -103,3 +103,26 @@ Format : contexte, options, choix, raison.
 - Choix : le hero dit « 5 questions », fait vérifiable. Aucune durée n'est affichée dans l'interface.
 - Estimation interne, non mesurée : l'éligibilité (5 questions) prend environ 1 à 2 minutes à une personne qui la découvre. Le dépôt des pièces dépend des documents déjà disponibles : aucun chiffre n'est avancé.
 - À faire : chronométrer 5 personnes (test prévu à la semaine 3 du plan du PRD) avant d'afficher une durée.
+
+## D16. Passage en HTML, CSS et JavaScript (demande de l'utilisatrice)
+- Contexte : « j'aurais souhaité que ce soit du HTML et non du TypeScript ». Le brief verrouillait Vite, React 18 et TypeScript ; l'utilisatrice a choisi le port complet.
+- Choix : site statique dans `html/` (pages HTML, modules JavaScript natifs, composants natifs `<dialog>`, `<details>`, `<input type="range">`). La feuille de style `html/css/app.css` est compilée par Tailwind (`npm run css`) puis livrée telle quelle : aucun build au déploiement.
+- Conservé : toute la logique (moteur d'éligibilité, pièces, assistant scripté), le design, les jetons, les 9 écrans.
+- Perdu : Radix (remplacé par les éléments natifs), Zustand (remplacé par un store de 20 lignes persisté), les tests unitaires du moteur (ils vivaient avec Vitest, à porter).
+- Récupérable : la version React/TypeScript est sur le tag Git `react-version`.
+
+## D17. Étiquettes « Exemple fictif » : conflit entre deux consignes
+- Contexte : une consigne demandait de retirer toutes les mentions « Exemple fictif » (parcours comme un vrai), la suivante d'étiqueter le délai de réponse, la durée de conservation et les chiffres de financement.
+- Choix : une note discrète en pied des écrans concernés (résultat d'éligibilité, récapitulatif, confirmation), au lieu d'une étiquette sur chaque valeur. Les chiffres restent présentés comme dans un vrai produit, la note dit qu'ils sont fictifs.
+- Les deux consignes sont donc respectées à moitié. À trancher si l'une doit l'emporter : retirer les notes (parcours « vrai »), ou remettre une étiquette par valeur.
+
+## D18. Logo : mot-symbole « élan » en bas de casse
+- Comparaison à 16, 24 et 48 px de trois pistes (`docs/screens/logo-variantes.png`) : capitales fines (anonyme), capitales avec ligature LA (le pied du L fusionne avec le A, illisible à 16 px), bas de casse (retenu).
+- Retenu : « élan » en trait de 6, « l » coupé à 45° dans le prolongement de l'accent du « é ». Le symbole devient le « é » seul, cohérent avec le mot-symbole. Espacement du « n » resserré après comparaison.
+
+## D19. Profils et écran de bienvenue
+- Ajout de `/bonjour` : « Bonjour Fabienne. », « Bonjour Nicolas. » ou « Bonjour. » (experte-comptable, non nommée dans le brief), puis démarrage du parcours. Le bouton « Commencer » du hero y mène.
+- Le bouton de profil est dans chaque en-tête et ouvre un sélecteur ; le profil affiché suit la route (Fabienne, experte-comptable, Nicolas).
+
+## D20. Relance de Nicolas
+- Dossier complet : « Relancer » est remplacé par « Confirmer la réception », avec un message de confirmation. Dossier incomplet : le message liste les pièces manquantes et les pièces à corriger, séparément. Jamais de décompte à zéro.

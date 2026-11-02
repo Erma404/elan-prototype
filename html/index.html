@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Un financement clair, un dossier complet · Élan</title>
+  <meta name="description" content="Élan : vérifiez votre éligibilité, déposez vos pièces avec un guide à chaque étape et envoyez un dossier prêt à instruire." />
+  <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" as="image" href="/photos/hero.jpg" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div id="racine" class="relative bg-bg text-text">
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-demo)] focus:rounded-sm focus:bg-text focus:px-4 focus:py-2 focus:text-bg">Aller au contenu</a>
+    <main id="contenu">
+      <!-- Hero : épinglé au scroll, la photo se resserre en carte arrondie et le texte s'estompe -->
+      <section id="hero" aria-labelledby="hero-titre" class="relative h-[190svh]">
+        <header id="barre" aria-hidden="true" class="pointer-events-none fixed inset-x-0 top-0 z-[var(--z-header)] -translate-y-2 border-b border-border bg-bg/90 text-text opacity-0 backdrop-blur-sm transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-out)]">
+          <div class="mx-auto flex h-16 max-w-[88rem] items-center justify-between px-5 sm:px-8">
+            <a href="/" tabindex="-1" aria-label="Élan, accueil" data-logo></a>
+            <a href="/bonjour" tabindex="-1" class="tr inline-flex min-h-11 items-center rounded-full bg-primary px-6 text-sm font-medium text-primary-fg hover:bg-primary-hover">Commencer</a>
+          </div>
+        </header>
+        <div id="scene" class="sticky top-0 h-svh overflow-hidden">
+          <div id="photo" class="absolute inset-0 overflow-hidden bg-[#2b2620]">
+            <img id="photo-img" src="/photos/hero.jpg" width="2400" height="1371" alt="Gros plan sur les mains d’un homme en veste, qui range un portefeuille dans sa poche intérieure" class="size-full scale-[1.04] object-cover object-center" fetchpriority="high" />
+            <div id="voile" aria-hidden="true" class="absolute inset-0 bg-black opacity-45"></div>
+          </div>
+          <p id="mention" class="absolute left-5 top-[12svh] hidden max-w-[14.5rem] text-[clamp(0.8125rem,1vw,0.9375rem)] font-light leading-[1.4] text-white sm:left-8 sm:block">Le financement des petites entreprises, instruit par de vrais chargés d’affaires.</p>
+          <figure id="carte" class="absolute right-5 top-[8.5svh] hidden w-[clamp(18rem,22.2vw,21rem)] items-center gap-[1.2rem] bg-white/25 p-5 text-white sm:right-10 lg:flex">
+            <img src="/photos/photo-1.jpg" width="87" height="60" alt="" class="h-[3.75rem] w-[5.4rem] shrink-0 object-cover object-[50%_18%]" />
+            <div><blockquote class="text-[clamp(0.8125rem,0.97vw,0.9375rem)] font-light leading-[1.35]">Je ne savais pas ce qu’on attendait de moi, ni si j’avais une chance.</blockquote><figcaption class="mt-2 text-[clamp(0.8125rem,0.97vw,0.9375rem)] font-light">Fabienne M., céramiste</figcaption></div>
+          </figure>
+          <div id="texte" class="absolute inset-x-0 bottom-[12svh] z-10 mx-auto flex max-w-[68rem] flex-col items-center px-6 text-center text-white">
+            <h1 id="hero-titre" class="text-[clamp(2.125rem,4.3vw,3.875rem)] font-light leading-[1.16] tracking-[-0.025em]">Un financement clair,<br class="hidden sm:block" /> un dossier complet.</h1>
+            <p class="mt-[clamp(1.5rem,3.4svh,2.25rem)] max-w-[36rem] text-[clamp(1rem,1.32vw,1.1875rem)] font-light leading-[1.5] tracking-[0.005em] text-white">Cinq questions pour savoir si vous avez une chance, puis vos pièces expliquées une à une, jusqu’à un dossier prêt à instruire.</p>
+            <a href="/bonjour" class="tr mt-[clamp(1.75rem,4.4svh,2.75rem)] inline-flex h-[clamp(2.75rem,3.7vw,3.3125rem)] items-center rounded-full bg-[#f5f4f1] px-[clamp(1.75rem,2.8vw,2.5rem)] text-[clamp(0.9375rem,1.1vw,1rem)] font-normal text-[#1f1e1b] hover:bg-white active:scale-[0.98]">Commencer</a>
+            <p class="mt-4 text-[clamp(0.75rem,0.95vw,0.875rem)] font-light text-white">5 questions&nbsp;• sans compte</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="px-5 py-10 text-center sm:px-8"><p class="text-sm text-muted">Prototype, données fictives</p></footer>
+  </div>
+  <script type="module" src="/js/accueil.js"></script>
+</body>
+</html>

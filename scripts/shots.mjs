@@ -1,6 +1,6 @@
 // Captures de tous les écrans : npm run shots [filtre]. Sortie : docs/screens/
 import { chromium } from '@playwright/test';
-const base = process.env.BASE || 'http://127.0.0.1:5173';
+const base = process.env.BASE || 'http://127.0.0.1:5180';
 const filter = process.argv[2];
 const pages = [{ name: 'landing', path: '/' }, { name: 'styleguide', path: '/styleguide' }];
 const sizes = [[1440, 900, '1440'], [768, 1024, '768'], [390, 844, '390']];

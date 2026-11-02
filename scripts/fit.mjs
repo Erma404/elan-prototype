@@ -1,6 +1,6 @@
 // Vérifie qu'un écran tient dans la fenêtre sans scroller de page. Échoue sinon.
 import { chromium } from '@playwright/test';
-const base = process.env.BASE || 'http://127.0.0.1:5173';
+const base = process.env.BASE || 'http://127.0.0.1:5180';
 const answers = { projet: 'equipement', effectif: 3, anciennete: 4, montant: 80000, secteur: 'artisanat' };
 const cas = [
   { nom: 'éligibilité, question 1', path: '/eligibilite', ls: {} },

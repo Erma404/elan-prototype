@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Système de design · Élan</title>
+  <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body class="bg-bg text-text">
+  <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-demo)] focus:rounded-sm focus:bg-text focus:px-4 focus:py-2 focus:text-bg">Aller au contenu</a>
+  <header class="sticky top-0 z-[var(--z-header)] border-b border-border bg-bg/90 backdrop-blur-sm"><div class="mx-auto flex h-16 max-w-[88rem] items-center justify-between gap-4 px-4 sm:px-8"><a href="/" aria-label="Élan, accueil" id="logo"></a><div role="group" aria-label="Thème" class="flex gap-1 rounded-sm bg-bg-soft p-1" id="themes"></div></div></header>
+  <main id="contenu" class="mx-auto max-w-[88rem] px-4 pb-24 pt-6 sm:px-8">
+    <div class="mb-6 flex min-h-[22rem] flex-col justify-end rounded-xl bg-text p-8 text-bg sm:p-14"><p class="mb-6 text-lg opacity-70">Système de design Élan</p><h1 class="max-w-4xl text-[clamp(2.5rem,6vw,4.25rem)] font-bold leading-[1.08] tracking-tighter">Des composants qui ne connaissent que des jetons.</h1><p class="mt-6 max-w-2xl text-xl opacity-80">Changez le thème en haut à droite : rien n’est écrit en dur. Modifier <code class="ident">tokens.css</code> suffit à reskinner l’application.</p></div>
+    <div class="grid gap-6 lg:grid-cols-6">
+      <section aria-labelledby="couleurs" class="rounded-card bg-bg-soft p-6 sm:p-10 lg:col-span-6"><h2 id="couleurs" class="mb-8 text-3xl font-semibold tracking-tighter">Couleurs sémantiques</h2><ul id="pastilles" class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6"></ul></section>
+      <section aria-labelledby="boutons" class="rounded-card bg-bg-soft p-6 sm:p-10 lg:col-span-3"><h2 id="boutons" class="mb-8 text-3xl font-semibold tracking-tighter">Boutons</h2><div class="flex flex-col gap-5"><div class="flex flex-wrap items-center gap-3" id="b-var"></div><div class="flex flex-wrap items-center gap-3" id="b-tai"></div><div class="flex flex-wrap items-center gap-3" id="b-etat"></div></div></section>
+      <section aria-labelledby="statuts" class="rounded-card bg-bg-soft p-6 sm:p-10 lg:col-span-3"><h2 id="statuts" class="mb-8 text-3xl font-semibold tracking-tighter">Statuts de pièce</h2><div class="flex flex-wrap gap-2" id="s-liste"></div><p class="mt-4 text-sm text-muted">Toujours une icône et un texte, jamais la couleur seule.</p></section>
+      <section aria-labelledby="bannieres" class="rounded-card bg-bg-soft p-6 sm:p-10 lg:col-span-6"><h2 id="bannieres" class="mb-8 text-3xl font-semibold tracking-tighter">Bandeaux et progression</h2><div class="grid gap-3 md:grid-cols-2" id="b-liste"></div><div class="mt-6 max-w-xl" id="progres"></div></section>
+      <section aria-labelledby="champs" class="rounded-card bg-bg-soft p-6 sm:p-10 lg:col-span-6"><h2 id="champs" class="mb-8 text-3xl font-semibold tracking-tighter">Champs</h2><div class="grid gap-6 md:grid-cols-2"><div><label for="c1" class="text-sm font-medium">Adresse e-mail de l’experte-comptable</label><input id="c1" type="email" placeholder="prenom@cabinet.fr" class="tr mt-1.5 h-11 w-full rounded-sm border border-border-strong bg-surface px-3.5 text-base hover:border-text" aria-describedby="c1h"><p id="c1h" class="mt-1.5 text-sm text-muted">Elle recevra un lien limité aux pièces.</p></div><div><label for="c2" class="text-sm font-medium">Adresse e-mail</label><input id="c2" type="email" value="claire.cabinet" aria-invalid="true" aria-describedby="c2e" class="mt-1.5 h-11 w-full rounded-sm border border-danger bg-surface px-3.5 text-base"><p id="c2e" role="alert" class="mt-1.5 text-sm font-medium text-danger">Cette adresse n’est pas valide. Vérifiez le « @ » et le nom de domaine.</p></div></div></section>
+    </div>
+  </main>
+  <script type="module" src="/js/page-styleguide.js"></script>
+</body>
+</html>

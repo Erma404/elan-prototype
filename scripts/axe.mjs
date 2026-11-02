@@ -1,7 +1,7 @@
 // Audit axe-core : npm run axe. Échoue s'il reste une violation.
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const base = process.env.BASE || 'http://127.0.0.1:5173';
+const base = process.env.BASE || 'http://127.0.0.1:5180';
 const paths = (process.argv[2] ? process.argv[2].split(',') : ['/', '/styleguide']);
 const b = await chromium.launch();
 let total = 0;

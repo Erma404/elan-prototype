@@ -1,7 +1,7 @@
 // Vérifie le contraste AA de toutes les paires sémantiques, en clair et en sombre.
 import { readFileSync } from 'node:fs';
 import { ratio } from './contrast.mjs';
-const css = readFileSync(new URL('../src/styles/tokens.css', import.meta.url), 'utf8');
+const css = readFileSync(new URL('../html/css/input.css', import.meta.url), 'utf8');
 const grab = (block) => Object.fromEntries([...block.matchAll(/--color-([\w-]+):\s*(#[0-9a-f]{6})/gi)].map(m => [m[1], m[2]]));
 const light = grab(css.split(':root[data-theme="dark"]')[0]);
 const dark = { ...light, ...grab(css.split(':root[data-theme="dark"]')[1]) };
