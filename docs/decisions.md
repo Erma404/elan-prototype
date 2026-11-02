@@ -137,3 +137,7 @@ Format : contexte, options, choix, raison.
 - Choix : « Dès le départ, j'ai su si j'avais ma chance. Chaque pièce m'a été expliquée. », attribuée à Fabienne M., céramiste. Texte écrit pour le prototype, aucun chiffre, aucun résultat promis (pas de « mon four est financé »).
 - Honnêteté : ce n'est pas une parole recueillie. Dans un produit réel, cette carte devrait citer un vrai retour d'utilisatrice, avec son accord. Le brief reste cité tel quel dans `docs/parcours-cible.md`.
 - Essai écarté : la phrase de marque « Élan donne sa chance à chaque entrepreneur qui ose » avec un lien d'action a été testée sur la carte, puis retirée à la demande de l'utilisatrice. La carte reste le témoignage de Fabienne côté bénéfice.
+
+## D24. Écran de bienvenue : une seule phrase
+- Contexte : première connexion. Le texte d'accueil (le projet de four, le déroulé) donnait trop d'informations avant même de commencer.
+- Choix : le salut et une phrase d'invitation (« Prête à démarrer votre demande ? », « Vos dossiers vous attendent. », « Fabienne M. vous a invitée à déposer des pièces. »). Le contexte du projet est donné par le parcours lui-même.
