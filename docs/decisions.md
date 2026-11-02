@@ -131,3 +131,8 @@ Format : contexte, options, choix, raison.
 - Historique : « Votre demande de financement, sans deviner ce qu'on attend de vous » (rejetée : décrit un problème, ne vend rien) puis « Un financement clair, un dossier complet » (rejetée : descriptive).
 - Choix : s'appuyer sur le nom de la marque (élan = impulsion) avec une promesse de bénéfice, courte, sur deux lignes comme la référence. Sous-titre : le comment (éligibilité, pièces guidées, dossier prêt à instruire), sans durée ni chiffre non mesuré.
 - Alternatives écartées : « Le financement de votre projet, enfin lisible » (bonne mais négative en creux), « Votre projet mérite un oui » (promet une réponse que le produit ne garantit pas).
+
+## D22. Carte du hero : phrase de Fabienne côté bénéfice (fictive)
+- Contexte : la citation du brief (« Je ne savais pas ce qu'on attendait de moi... J'ai lâché au moment des pièces ») décrit le problème de départ. Sur un hero elle ne donne pas envie d'agir.
+- Choix : « Dès le départ, j'ai su si j'avais ma chance. Chaque pièce m'a été expliquée. », attribuée à Fabienne M., céramiste. Texte écrit pour le prototype, aucun chiffre, aucun résultat promis (pas de « mon four est financé »).
+- Honnêteté : ce n'est pas une parole recueillie. Dans un produit réel, cette carte devrait citer un vrai retour d'utilisatrice, avec son accord. Le brief reste cité tel quel dans `docs/parcours-cible.md`.
