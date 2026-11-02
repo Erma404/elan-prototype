@@ -32,3 +32,4 @@ test-results
 docs/reference/
 docs/screens/_reference-*
 docs/screens/dbg-*
+.env*
