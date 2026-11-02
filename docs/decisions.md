@@ -126,3 +126,8 @@ Format : contexte, options, choix, raison.
 
 ## D20. Relance de Nicolas
 - Dossier complet : « Relancer » est remplacé par « Confirmer la réception », avec un message de confirmation. Dossier incomplet : le message liste les pièces manquantes et les pièces à corriger, séparément. Jamais de décompte à zéro.
+
+## D21. Baseline du hero : « Donnez de l'élan à votre projet. »
+- Historique : « Votre demande de financement, sans deviner ce qu'on attend de vous » (rejetée : décrit un problème, ne vend rien) puis « Un financement clair, un dossier complet » (rejetée : descriptive).
+- Choix : s'appuyer sur le nom de la marque (élan = impulsion) avec une promesse de bénéfice, courte, sur deux lignes comme la référence. Sous-titre : le comment (éligibilité, pièces guidées, dossier prêt à instruire), sans durée ni chiffre non mesuré.
+- Alternatives écartées : « Le financement de votre projet, enfin lisible » (bonne mais négative en creux), « Votre projet mérite un oui » (promet une réponse que le produit ne garantit pas).
