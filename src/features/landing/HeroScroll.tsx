@@ -65,10 +65,10 @@ export default function HeroScroll() {
 
         {/* Bloc central : titre 66 px sur deux lignes, sous-titre 19 px, pilule 142 × 53, mention 14,5 px */}
         <motion.div style={live ? { y: textY, opacity: textOpacity } : undefined} className="absolute inset-x-0 bottom-[12svh] z-10 mx-auto flex max-w-[68rem] flex-col items-center px-6 text-center text-white">
-          <h1 id="hero-titre" className="text-[clamp(2.125rem,4.3vw,3.875rem)] font-light leading-[1.16] tracking-[-0.025em]">Votre financement, sans deviner ce qu’on attend de vous.</h1>
-          <p className="mt-[clamp(1.5rem,3.4svh,2.25rem)] max-w-[36rem] text-[clamp(1rem,1.32vw,1.1875rem)] font-light leading-[1.5] tracking-[0.005em] text-white">Cinq questions pour savoir si vous avez une chance, puis vos pièces expliquées une à une, jusqu’à une demande complète.</p>
+          <h1 id="hero-titre" className="text-[clamp(2.125rem,4.3vw,3.875rem)] font-light leading-[1.16] tracking-[-0.025em]">Un financement clair,<br className="hidden sm:block" /> un dossier complet.</h1>
+          <p className="mt-[clamp(1.5rem,3.4svh,2.25rem)] max-w-[36rem] text-[clamp(1rem,1.32vw,1.1875rem)] font-light leading-[1.5] tracking-[0.005em] text-white">Cinq questions pour savoir si vous avez une chance, puis vos pièces expliquées une à une, jusqu’à un dossier prêt à instruire.</p>
           <button type="button" onClick={() => go('/eligibilite')} className="tr mt-[clamp(1.75rem,4.4svh,2.75rem)] h-[clamp(2.75rem,3.7vw,3.3125rem)] cursor-pointer rounded-full bg-[#f5f4f1] px-[clamp(1.75rem,2.8vw,2.5rem)] text-[clamp(0.9375rem,1.1vw,1rem)] font-normal text-[#1f1e1b] hover:bg-white active:scale-[0.98]">Commencer</button>
-          <p className="mt-4 text-[clamp(0.75rem,0.95vw,0.875rem)] font-light text-white">1 minute&nbsp;• sans compte</p>
+          <p className="mt-4 text-[clamp(0.75rem,0.95vw,0.875rem)] font-light text-white">5 questions&nbsp;• sans compte</p>
         </motion.div>
       </div>
     </section>

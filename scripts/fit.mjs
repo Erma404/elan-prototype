@@ -4,7 +4,7 @@ const base = process.env.BASE || 'http://127.0.0.1:5173';
 const answers = { projet: 'equipement', effectif: 3, anciennete: 4, montant: 80000, secteur: 'artisanat' };
 const cas = [
   { nom: 'éligibilité, question 1', path: '/eligibilite', ls: {} },
-  { nom: 'éligibilité, résultat', path: '/eligibilite', ls: { 'elan:demande': { state: { answers, step: 5, financementId: null }, version: 0 } } },
+  { nom: 'éligibilité, résultat', path: '/eligibilite', ls: { 'elan:demande:html': { answers, step: 5, financementId: null } } },
   { nom: 'pièces, premier accès', path: '/demande/pieces', ls: {} },
   { nom: 'récapitulatif', path: '/demande/recapitulatif', ls: {} },
   { nom: 'confirmation', path: '/demande/envoyee', ls: {} },

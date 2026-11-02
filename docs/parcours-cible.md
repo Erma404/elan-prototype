@@ -8,7 +8,7 @@ Qu'un entrepreneur éligible arrive au bout d'une demande complète, sans devine
 | # | Qui | Étape | Ce qui change |
 |---|---|---|---|
 | 0 | Fabienne | Landing | Promesse concrète, pas d'assistant en vitrine |
-| 1 | Fabienne | Pré-éligibilité, 5 questions | Elle sait en 1 minute si elle a une chance, et pourquoi |
+| 1 | Fabienne | Pré-éligibilité, 5 questions | Elle sait en cinq questions si elle a une chance, et pourquoi |
 | 2 | Fabienne, experte-comptable | Pièces guidées, récapitulatif, envoi | Chaque pièce est expliquée, exemple à l'appui, avec reprise là où elle s'est arrêtée |
 | 3 | Nicolas | Fiche dossier dans Élan Pro | Il reçoit un dossier complet, avec critères vérifiés et pièces à corriger |
 

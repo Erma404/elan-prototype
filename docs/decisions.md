@@ -97,3 +97,9 @@ Format : contexte, options, choix, raison.
 - Inchangé : aucun montant prérempli (le montant n'apparaît que s'il a été saisi), l'assistant ne cite aucun nombre qu'il n'a pas reçu, les critères restent reformulés sans chiffre.
 - Risque assumé : un évaluateur pourrait prendre « jusqu'à 80 % de l'équipement » pour une vraie condition. Le bandeau de bas d'écran et ce registre sont la seule protection.
 - Correctif associé : la visite guidée ne réinitialise plus les réponses de l'éligibilité, ce qui effaçait le montant choisi à la jauge.
+
+## D15. Aucune durée promise tant qu'elle n'est pas mesurée
+- Contexte : « 1 minute » (objectif du brief pour la pré-éligibilité) figurait dans le hero comme une promesse. Personne n'a chronométré le parcours avec de vraies personnes.
+- Choix : le hero dit « 5 questions », fait vérifiable. Aucune durée n'est affichée dans l'interface.
+- Estimation interne, non mesurée : l'éligibilité (5 questions) prend environ 1 à 2 minutes à une personne qui la découvre. Le dépôt des pièces dépend des documents déjà disponibles : aucun chiffre n'est avancé.
+- À faire : chronométrer 5 personnes (test prévu à la semaine 3 du plan du PRD) avant d'afficher une durée.
