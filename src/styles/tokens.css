@@ -1,0 +1,200 @@
+/*
+ * Jetons de design Élan.
+ * Cette couche simule le design system existant : les composants ne consomment
+ * que ces variables, jamais de valeur en dur. Changer ce fichier suffit à reskinner l'application.
+ * Contrastes validés AA avec scripts/contrast.mjs (voir docs/design-tokens.md).
+ */
+@theme {
+  /* ---------- Échelles primitives (50 à 900) ---------- */
+  --color-ink-50: #faf9f6;
+  --color-ink-100: #f3f1ec;
+  --color-ink-200: #e8e5de;
+  --color-ink-300: #d3cfc5;
+  --color-ink-400: #a7a195;
+  --color-ink-500: #8a8478;
+  --color-ink-600: #5f5a52;
+  --color-ink-700: #44403a;
+  --color-ink-800: #2c2a26;
+  --color-ink-900: #1f1e1b;
+
+  --color-bronze-50: #faf5eb;
+  --color-bronze-100: #f4ebdb;
+  --color-bronze-200: #e8d6b3;
+  --color-bronze-300: #d9be8b;
+  --color-bronze-400: #c9a66b;
+  --color-bronze-500: #b8975f;
+  --color-bronze-600: #8f6d2e;
+  --color-bronze-700: #735620;
+  --color-bronze-800: #5c4318;
+  --color-bronze-900: #3e2d10;
+
+  --color-green-50: #edf3ec;
+  --color-green-100: #dbe8d8;
+  --color-green-200: #b9d3b3;
+  --color-green-300: #92b98a;
+  --color-green-400: #6f9f69;
+  --color-green-500: #55885a;
+  --color-green-600: #3f6b4a;
+  --color-green-700: #31553a;
+  --color-green-800: #254029;
+  --color-green-900: #182b1c;
+
+  --color-amber-50: #fbf0dc;
+  --color-amber-100: #f6e2bb;
+  --color-amber-200: #efce8a;
+  --color-amber-300: #e3b358;
+  --color-amber-400: #c9922d;
+  --color-amber-500: #a97616;
+  --color-amber-600: #8a5a12;
+  --color-amber-700: #6d460e;
+  --color-amber-800: #51340b;
+  --color-amber-900: #382308;
+
+  --color-red-50: #fbeae7;
+  --color-red-100: #f6d3cd;
+  --color-red-200: #eba9a0;
+  --color-red-300: #de7d71;
+  --color-red-400: #cc5a4c;
+  --color-red-500: #b94335;
+  --color-red-600: #a63326;
+  --color-red-700: #85281e;
+  --color-red-800: #651e17;
+  --color-red-900: #451510;
+
+  /* ---------- Sémantique (mode clair par défaut) ---------- */
+  --color-bg: #faf9f6;
+  --color-bg-soft: #f3f1ec;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f3f1ec;
+  --color-text: #1f1e1b;
+  --color-muted: #5f5a52;
+  --color-subtle: #6f695f;
+  --color-border: #e8e5de;
+  --color-border-strong: #8a8478;
+  /* Action principale : encre. Le bronze est réservé aux moments clés (progression, sélection, liens). */
+  --color-primary: #1f1e1b;
+  --color-primary-hover: #3a3833;
+  --color-primary-fg: #faf9f6;
+  --color-accent: #8f6d2e;
+  --color-accent-hover: #735620;
+  --color-accent-active: #5c4318;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #f4ebdb;
+  --color-accent-text: #735620;
+  --color-success: #3f6b4a;
+  --color-success-soft: #edf3ec;
+  --color-warning: #8a5a12;
+  --color-warning-soft: #fbf0dc;
+  --color-danger: #a63326;
+  --color-danger-soft: #fbeae7;
+  --color-focus: #1f1e1b;
+  --color-overlay: rgb(31 30 27 / 0.5);
+
+  /* Éléments générés par l'IA : fond sombre chaud et dégradé signature */
+  --color-ai-bg: #14120e;
+  --color-ai-surface: #1f1c17;
+  --color-ai-text: #f3f0e8;
+  --color-ai-muted: #b8b1a4;
+  --color-ai-border: rgb(255 255 255 / 0.14);
+  --color-ai-accent: #e3c48c;
+
+  /* ---------- Typographie ---------- */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.5rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 3rem;
+  --text-5xl: 3.5rem;
+  --text-5xl--line-height: 4rem;
+  --tracking-tight: -0.02em;
+  --tracking-tighter: -0.035em;
+
+  /* ---------- Rayons ---------- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-card: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  /* ---------- Ombres (3 niveaux) ---------- */
+  --shadow-sm: 0 1px 2px rgb(31 30 27 / 0.04);
+  --shadow-md: 0 1px 2px rgb(31 30 27 / 0.03), 0 8px 24px rgb(31 30 27 / 0.05);
+  --shadow-lg: 0 4px 8px rgb(31 30 27 / 0.05), 0 24px 56px rgb(31 30 27 / 0.14);
+
+  /* ---------- Mouvement ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---------- Empilement ---------- */
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-drawer: 50;
+  --z-dialog: 60;
+  --z-toast: 70;
+  --z-demo: 80;
+}
+
+@theme inline {
+  --background-image-ai: var(--gradient-ai);
+}
+
+:root {
+  color-scheme: light;
+  /* Dégradé IA signature : encre chaude, bronze, touche de vert sauge. Réservé aux éléments générés par l'IA. */
+  --gradient-ai:
+    radial-gradient(120% 140% at 0% 0%, #5b4320 0%, rgb(91 67 32 / 0) 58%),
+    radial-gradient(80% 110% at 100% 100%, #2f4237 0%, rgb(47 66 55 / 0) 62%),
+    #14120e;
+  --gradient-ai-line: linear-gradient(90deg, #e3c48c, #8fb89a);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #12110e;
+  --color-bg-soft: #1a1814;
+  --color-surface: #1c1a16;
+  --color-surface-sunken: #0e0d0b;
+  --color-text: #f3f0e8;
+  --color-muted: #a8a196;
+  --color-subtle: #8f897e;
+  --color-border: #2e2b25;
+  --color-border-strong: #6f695e;
+  --color-primary: #f3f0e8;
+  --color-primary-hover: #ffffff;
+  --color-primary-fg: #12110e;
+  --color-accent: #c9a66b;
+  --color-accent-hover: #d8b97e;
+  --color-accent-active: #e3c48c;
+  --color-accent-fg: #12110e;
+  --color-accent-soft: #2a2214;
+  --color-accent-text: #d8b97e;
+  --color-success: #8fbf98;
+  --color-success-soft: #172219;
+  --color-warning: #e0a94a;
+  --color-warning-soft: #2b2009;
+  --color-danger: #f08a7c;
+  --color-danger-soft: #331612;
+  --color-focus: #f3f0e8;
+  --color-overlay: rgb(0 0 0 / 0.65);
+  --color-ai-bg: #0e0d0b;
+  --color-ai-surface: #1c1a16;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.4), 0 24px 56px rgb(0 0 0 / 0.6);
+}

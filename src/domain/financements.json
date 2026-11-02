@@ -1,0 +1,100 @@
+{
+  "version": "Référentiel Élan, v1",
+  "financements": [
+    {
+      "id": "pret-equipement-artisans",
+      "nom": "Prêt Équipement Artisans",
+      "resume": "Un prêt pour acheter une machine, un four, un véhicule ou de l’outillage.",
+      "projets": [
+        "equipement"
+      ],
+      "secteurs": [
+        "artisanat",
+        "industrie"
+      ],
+      "effectifMax": 19,
+      "ancienneteMin": 2,
+      "montantMin": 3000,
+      "montantMax": 150000,
+      "montantIndicatif": "Jusqu’à 80 % de l’équipement",
+      "delai": "Réponse sous 10 jours ouvrés"
+    },
+    {
+      "id": "garantie-croissance-tpe",
+      "nom": "Garantie Croissance TPE",
+      "resume": "Une garantie qui facilite l’accord de votre banque pour financer votre croissance.",
+      "projets": [
+        "equipement",
+        "recrutement",
+        "export",
+        "reprise"
+      ],
+      "secteurs": [
+        "artisanat",
+        "commerce",
+        "services",
+        "industrie"
+      ],
+      "effectifMax": 9,
+      "ancienneteMin": 1,
+      "montantMin": 3000,
+      "montantMax": 300000,
+      "montantIndicatif": "Garantie jusqu’à 70 % du prêt bancaire",
+      "delai": "Réponse sous 15 jours ouvrés"
+    },
+    {
+      "id": "avance-innovation",
+      "nom": "Avance Innovation",
+      "resume": "Une avance remboursable pour financer un projet d’innovation.",
+      "projets": [
+        "innovation"
+      ],
+      "secteurs": [
+        "artisanat",
+        "commerce",
+        "services",
+        "industrie"
+      ],
+      "effectifMax": 49,
+      "ancienneteMin": 1,
+      "montantMin": 10000,
+      "montantMax": 200000,
+      "montantIndicatif": "Jusqu’à 50 % des dépenses du projet",
+      "delai": "Réponse sous 20 jours ouvrés"
+    },
+    {
+      "id": "aide-premiere-embauche",
+      "nom": "Aide Première Embauche",
+      "resume": "Une aide forfaitaire pour recruter votre premier salarié ou le suivant.",
+      "projets": [
+        "recrutement"
+      ],
+      "secteurs": [
+        "artisanat",
+        "commerce",
+        "services",
+        "industrie"
+      ],
+      "effectifMax": 9,
+      "ancienneteMin": 1,
+      "montantMin": 0,
+      "montantMax": 25000,
+      "montantIndicatif": "Aide forfaitaire de 4 000 à 8 000 €",
+      "delai": "Réponse sous 10 jours ouvrés"
+    }
+  ],
+  "alternatives": [
+    {
+      "nom": "Un conseiller Élan",
+      "texte": "Il regarde votre situation avec vous et vous oriente vers un autre dispositif."
+    },
+    {
+      "nom": "Votre chambre de métiers ou de commerce",
+      "texte": "Elle accompagne les créateurs et les dirigeants, souvent gratuitement."
+    },
+    {
+      "nom": "Les aides régionales",
+      "texte": "Votre région finance parfois des projets que nous ne couvrons pas."
+    }
+  ]
+}

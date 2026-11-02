@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../assets/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    min-height: 100dvh;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+  h1, h2, h3, h4 {
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection { background: var(--color-accent-soft); color: var(--color-text); }
+  .tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .tr {
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-out);
+  }
+  .logo-e { clip-path: inset(0 100% 0 0); animation: logo-reveal 480ms var(--ease-out) forwards; }
+  .logo-a { opacity: 0; transform: translate(-10px, 10px); animation: logo-settle 320ms 480ms var(--ease-out) forwards; }
+  .anim-fade { animation: fade-in var(--duration-base) var(--ease-out); }
+  .anim-pop { animation: pop-in var(--duration-slow) var(--ease-out); }
+  .anim-drawer { animation: drawer-in var(--duration-slow) var(--ease-out); }
+  .anim-overlay { animation: fade-in var(--duration-base) var(--ease-out); }
+  .anim-toast { animation: toast-in var(--duration-slow) var(--ease-out); }
+  .shimmer {
+    background: linear-gradient(90deg, var(--color-bg-soft) 0%, var(--color-border) 50%, var(--color-bg-soft) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+  .bg-ai { background: var(--gradient-ai); }
+  /* Étiquette LEDGE : petites capitales espacées précédées d'un point bronze */
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.625rem; font-size: var(--text-xs); line-height: 1rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); }
+  .eyebrow::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 999px; background: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-soft); flex: none; }
+  /* Montants, délais, « Enregistré à », statuts : Geist Sans, chiffres tabulaires. */
+  .mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+  /* La monospace est réservée aux identifiants techniques (numéro de dossier). */
+  .ident { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .ai-line { background: var(--gradient-ai-line); }
+}
+@keyframes logo-reveal { to { clip-path: inset(0 0 0 0); } }
+@keyframes logo-settle { to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+/* Le centrage est assuré par la propriété `translate` (Tailwind) : l'animation ne touche que `transform`, sans jamais remettre -50 %. */
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes drawer-in { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes caret { 50% { opacity: 0; } }
