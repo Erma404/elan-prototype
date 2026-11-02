@@ -136,8 +136,4 @@ Format : contexte, options, choix, raison.
 - Contexte : la citation du brief (« Je ne savais pas ce qu'on attendait de moi... J'ai lâché au moment des pièces ») décrit le problème de départ. Sur un hero elle ne donne pas envie d'agir.
 - Choix : « Dès le départ, j'ai su si j'avais ma chance. Chaque pièce m'a été expliquée. », attribuée à Fabienne M., céramiste. Texte écrit pour le prototype, aucun chiffre, aucun résultat promis (pas de « mon four est financé »).
 - Honnêteté : ce n'est pas une parole recueillie. Dans un produit réel, cette carte devrait citer un vrai retour d'utilisatrice, avec son accord. Le brief reste cité tel quel dans `docs/parcours-cible.md`.
-
-## D23. Carte du hero : phrase de marque plutôt que témoignage
-- Contexte : après D22, le témoignage fictif de Fabienne a été jugé peu engageant ; l'utilisatrice a proposé « Élan donne sa chance à… ».
-- Choix : « Élan donne sa chance à chaque entrepreneur qui ose. » suivie d'un lien d'action « Découvrez la vôtre en cinq questions → » vers l'écran de bienvenue. Ce n'est plus une citation : aucun faux témoignage, donc plus rien à justifier. « Donner sa chance » ne promet pas un financement.
-- Remplace D22 pour la carte du hero.
+- Essai écarté : la phrase de marque « Élan donne sa chance à chaque entrepreneur qui ose » avec un lien d'action a été testée sur la carte, puis retirée à la demande de l'utilisatrice. La carte reste le témoignage de Fabienne côté bénéfice.
