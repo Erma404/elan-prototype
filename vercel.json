@@ -5,9 +5,17 @@
   "outputDirectory": "html",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/expert/:token", "destination": "/expert.html" },
-    { "source": "/pro/dossiers/:id", "destination": "/pro.html" },
-    { "source": "/pro/dossiers", "destination": "/pro.html" },
-    { "source": "/pro", "destination": "/pro.html" }
+    {
+      "source": "/expert/:token",
+      "destination": "/expert"
+    },
+    {
+      "source": "/pro/dossiers/:id",
+      "destination": "/pro"
+    },
+    {
+      "source": "/pro/dossiers",
+      "destination": "/pro"
+    }
   ]
 }
