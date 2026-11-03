@@ -55,7 +55,8 @@ await p.locator('[data-v="quitter"]').click(); ok('visite guidée : sortie possi
 // 4 bis. Écran de bienvenue et changement de profil
 p = await page(); await p.goto(B + '/bonjour', { waitUntil: 'networkidle' });
 ok('bienvenue : « Bonjour Fabienne. » par défaut', (await p.locator('h1').innerText()).includes('Bonjour Fabienne'));
-await p.locator('[data-profil-choix="nicolas"]').click(); ok('bienvenue : « Bonjour Nicolas. » après changement de profil', (await p.locator('h1').innerText()).includes('Bonjour Nicolas'));
+ok('bienvenue : aucun sélecteur de profil sur la page, seulement le salut et « Commencer ma demande »', (await p.locator('[role=radiogroup]').count()) === 0 && (await p.getByRole('link', { name: /Commencer ma demande/ }).count()) === 1);
+await p.locator('[data-profil]').click(); await p.locator('[data-profil-choix="nicolas"]').click(); await p.waitForLoadState('networkidle'); ok('bienvenue : « Bonjour Nicolas. » après changement de profil par le bouton de l’en-tête', (await p.locator('h1').innerText()).includes('Bonjour Nicolas'));
 await p.getByRole('link', { name: /Voir mes dossiers/ }).click(); await p.waitForURL('**/pro/dossiers/argile'); ok('bienvenue : Nicolas arrive sur ses dossiers', true);
 ok('le bouton de profil est visible dans l’en-tête d’Élan Pro', await p.locator('[data-profil]').isVisible());
 await p.locator('[data-profil]').click(); await p.locator('[data-profil-choix="fabienne"]').click(); await p.waitForURL('**/bonjour'); ok('changer de profil depuis l’en-tête ramène à l’accueil du profil', (await p.locator('h1').innerText()).includes('Bonjour Fabienne'));

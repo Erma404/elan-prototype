@@ -141,3 +141,7 @@ Format : contexte, options, choix, raison.
 ## D24. Écran de bienvenue : une seule phrase
 - Contexte : première connexion. Le texte d'accueil (le projet de four, le déroulé) donnait trop d'informations avant même de commencer.
 - Choix : le salut et une phrase d'invitation (« Prête à démarrer votre demande ? », « Vos dossiers vous attendent. », « Fabienne M. vous a invitée à déposer des pièces. »). Le contexte du projet est donné par le parcours lui-même.
+
+## D25. Écran de bienvenue : le choix du profil passe dans l'en-tête
+- Choix : plus de sélecteur de profil sur la page. Restent le salut, une phrase et « Commencer ma demande », comme une vraie première connexion. Le changement de profil se fait par le bouton de profil de l'en-tête (présent sur tous les écrans), qui recharge l'accueil avec le bon salut.
+- Conséquence : pour un évaluateur, le changement de profil est un peu moins visible. Il reste aussi accessible depuis le panneau de démo (Maj + D).
