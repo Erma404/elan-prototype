@@ -159,3 +159,4 @@ Format : contexte, options, choix, raison.
 
 ## D28. Sous-titre du hero : la phrase de positionnement
 - Choix : « Le financement des petites entreprises, instruit par de vrais chargés d'affaires. » devient le sous-titre sous le H1, à la place du paragraphe décrivant le déroulé et de la mention en haut à gauche (supprimée pour ne pas la répéter). Le hero garde : logo, titre, sous-titre, « Commencer », « 5 questions • sans compte », carte de Fabienne.
+- Prolongement : une seconde phrase (« Cinq questions, vos pièces expliquées une à une, un dossier prêt à instruire. ») équilibre visuellement le titre : sous-titre sur trois lignes face à un titre sur deux. Espaces insécables pour éviter les coupures disgracieuses (« une à / une »).
