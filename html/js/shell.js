@@ -15,7 +15,7 @@ function stepper(courant) {
     return `<li ${etat === 'current' ? 'aria-current="step"' : ''} class="flex items-center gap-2"><span class="tabular grid size-6 place-items-center rounded-full text-xs font-semibold ${rond}">${etat === 'done' ? icon('check', 'size-3.5') : i + 1}</span><span class="hidden sm:inline ${etat === 'current' ? 'font-semibold' : 'text-muted'}">${s}</span><span class="sr-only sm:hidden">${s}${etat === 'done' ? ' (terminé)' : etat === 'current' ? ' (en cours)' : ''}</span>${i < ETAPES.length - 1 ? '<span aria-hidden="true" class="h-px w-4 bg-border-strong sm:w-8"></span>' : ''}</li>`
   }).join('')}</ol>`
 }
-const montantHtml = () => { const m = demande.get().answers.montant; return m !== undefined ? eur(m) : '<span class="text-base font-normal text-subtle">à préciser</span>' }
+const montantHtml = () => { const m = demande.get().answers.montant; return m !== undefined ? eur(m) : '<span class="whitespace-nowrap text-base font-normal text-subtle">à préciser</span>' }
 
 /** Monte la coque et renvoie l'élément <main> à remplir. `fit` verrouille la page à la hauteur de la fenêtre (≥ 1024 px). */
 export function monterCoque({ step, fit = true, wide = true, titre }) {

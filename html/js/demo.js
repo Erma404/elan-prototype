@@ -108,7 +108,7 @@ export function monterDemo() {
     if (!panneau.contains(e.target)) return
     const o = e.target.closest('[data-onglet]'); if (o) return selectOnglet(panneau, o.dataset.onglet)
     const per = e.target.closest('[data-persona]'); if (per) { ui.set({ persona: per.dataset.persona }); return allerA('/bonjour') }
-    const sc = e.target.closest('[data-scenario]'); if (sc) return allerA(sc.dataset.scenario === 'apres' ? '/demande/envoyee' : '/demande/pieces', sc.dataset.scenario)
+    const sc = e.target.closest('[data-scenario]'); if (sc?.dataset.scenario === 'corriger') sessionStorage.setItem('elan:piece', 'bilans'); if (sc) return allerA(sc.dataset.scenario === 'apres' ? '/demande/envoyee' : '/demande/pieces', sc.dataset.scenario)
     const er = e.target.closest('[data-erreur]'); if (er) { pieces.set({ erreur: er.dataset.erreur || null }); return majPanneau(panneau) }
     const th = e.target.closest('[data-choix-theme]'); if (th) { reglerTheme(th.dataset.choixTheme); return majPanneau(panneau) }
     const a = e.target.closest('[data-action]')?.dataset.action

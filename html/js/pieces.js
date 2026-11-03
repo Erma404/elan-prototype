@@ -102,7 +102,9 @@ function compter(etat) {
   const faites = PIECES.filter((p) => complete(etat[p.id].statut)).length;
   const bloquantes = PIECES.filter((p) => p.obligatoire && !complete(etat[p.id].statut));
   const recommandees = PIECES.filter((p) => !p.obligatoire && !complete(etat[p.id].statut));
-  return { faites, total: PIECES.length, bloquantes, recommandees };
+  const aCorriger = PIECES.filter((p) => etat[p.id].statut === "a-corriger");
+  const manquantes = bloquantes.filter((p) => etat[p.id].statut !== "a-corriger");
+  return { faites, total: PIECES.length, bloquantes, recommandees, aCorriger, manquantes };
 }
 export {
   ETAT_INITIAL,

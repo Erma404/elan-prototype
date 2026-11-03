@@ -105,4 +105,28 @@ await p.locator('#continuer').focus(); await p.keyboard.press('Enter'); await p.
 await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.keyboard.press('Enter'); await p.waitForTimeout(150); ok('clavier : Entrée valide la réponse présélectionnée (question 4 atteinte)', (await p.locator('#question').innerText()).includes('montant'));
 await p.keyboard.press('Escape');
 
+
+// 8. Pièce à corriger : l'envoi reste possible (l'IA alerte, ne bloque jamais), message et compteur cohérents
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-scenario="corriger"]').click(); await p.waitForURL('**/demande/pieces'); await p.waitForLoadState('networkidle');
+ok('scénario « pièce à corriger » : ouvre directement la pièce à corriger (Bilans)', (await p.locator('#detail').innerText()).includes('Bilans des deux derniers exercices') && (await p.locator('#detail').innerText()).includes('page 2'));
+ok('pièce à corriger : message d’aide cohérent (corriger ou envoyer quand même, pas « il manque »)', /à corriger/.test(await p.locator('main').innerText()) && !/Il manque/.test(await p.locator('main').innerText()));
+await p.getByRole('link', { name: /Envoyer quand même/ }).click(); await p.waitForURL('**/demande/recapitulatif');
+const rec = await p.locator('main').innerText();
+ok('récapitulatif : alerte claire (pièce à corriger, motif, conséquence)', /reste à corriger/.test(rec) && rec.includes('page 2') && /allonger/.test(rec));
+ok('récapitulatif : bouton « Envoyer quand même » non bloqué (hors consentement)', (await p.getByRole('button', { name: /Envoyer quand même/ }).count()) === 1 && !/Envoi bloqué/.test(rec));
+await p.locator('#consent').check(); await p.getByRole('button', { name: /Envoyer quand même/ }).click(); await p.waitForURL('**/demande/envoyee', { timeout: 8000 }); ok('envoi malgré une pièce à corriger : confirmation atteinte', true);
+// 9. Journal de Nicolas : échange avec l'assistant
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await p.getByRole('button', { name: /Où trouver|assistant|Besoin d’aide/i }).first().click().catch(() => {});
+await p.evaluate(() => { const k = 'elan:events:html'; sessionStorage.setItem(k, JSON.stringify({ items: [{ id: 1, name: 'aide_ia_utilisee', at: Date.now(), detail: 'bilan-valide' }] })) });
+await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' }); await p.locator('#t-journal').click();
+ok('journal Nicolas : « Échange avec l’assistant » quand Fabienne l’a utilisé (sa vraie question)', (await p.locator('#v-journal').innerText()).includes('Mon bilan est-il valable'));
+// 10. « Commencer » remet toujours Fabienne
+p = await page(); await p.goto(B + '/bonjour', { waitUntil: 'networkidle' }); await p.locator('[data-profil]').click(); await p.locator('[data-profil-choix="nicolas"]').click(); await p.waitForLoadState('networkidle');
+await p.goto(B + '/', { waitUntil: 'networkidle' }); await p.getByRole('link', { name: 'Commencer' }).first().click(); await p.waitForURL('**/bonjour**'); await p.waitForLoadState('networkidle');
+ok('« Commencer » de l’accueil : persona Fabienne rétabli', (await p.locator('h1').innerText()).includes('Bonjour Fabienne') && p.url().endsWith('/bonjour'));
+// 11. Confirmation d'envoi : logo aligné sur la colonne de texte
+p = await page(); await p.goto(B + '/demande/envoyee', { waitUntil: 'networkidle' });
+const al = await p.evaluate(() => Math.min(...[...document.querySelector('section svg').querySelectorAll('path')].map((x) => x.getBoundingClientRect().left)) - document.querySelector('h1').getBoundingClientRect().left);
+ok(`confirmation : logo aligné sur le texte (écart ${al.toFixed(1)} px)`, Math.abs(al) < 1.5);
+
 console.log(errs.length ? 'ERREURS CONSOLE :\n' + [...new Set(errs)].join('\n') : 'console propre'); console.log(ko ? `${ko} échec(s)` : 'toutes les vérifications passent'); await b.close(); process.exit(ko ? 1 : 0);

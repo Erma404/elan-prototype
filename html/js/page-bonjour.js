@@ -11,6 +11,7 @@ const PROFILS = {
   nicolas: { salut: 'Bonjour Nicolas.', texte: 'Vos dossiers vous attendent.', cta: 'Voir mes dossiers', url: '/pro/dossiers', nom: 'Nicolas', role: 'Chargé d’affaires, instruit les demandes' },
   experte: { salut: 'Bonjour.', texte: 'Fabienne M. vous a invitée à déposer des pièces.', cta: 'Déposer les pièces', url: '/expert/demo', nom: 'Experte-comptable', role: 'Invitée par Fabienne pour déposer des pièces' },
 }
+if (new URLSearchParams(location.search).has('depuis-accueil')) { ui.set({ persona: 'fabienne' }); history.replaceState(null, '', '/bonjour') }
 const racine = $('#racine'); racine.className = 'relative flex min-h-dvh flex-col bg-bg text-text'; document.title = 'Bonjour · Élan'
 function rendre() {
   const id = ui.get().persona in PROFILS ? ui.get().persona : 'fabienne', p = PROFILS[id]

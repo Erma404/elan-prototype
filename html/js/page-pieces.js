@@ -23,7 +23,7 @@ function suivante() {
   const apres = [...ordre(reste.filter((p) => p.obligatoire)), ...ordre(reste.filter((p) => !p.obligatoire))][0]
   const primaire = complete(etat[selection].statut)
   if (apres) return { label: 'Pièce suivante', id: apres.id, primaire }
-  if (c.bloquantes.length === 0) return { label: 'Passer à l’envoi', url: '/demande/recapitulatif', primaire: true }
+  if (c.manquantes.length === 0) return { label: 'Passer à l’envoi', url: '/demande/recapitulatif', primaire: true }
   return { label: 'Pièce suivante', id: PIECES[(idx + 1) % PIECES.length].id, primaire: false }
 }
 
@@ -57,13 +57,13 @@ function detail() {
 
 // ---------- Colonne d'avancement ----------
 function lateral() {
-  const st = pieces.get(), c = compter(st.etat), pct = (c.faites / c.total) * 100, bloque = c.bloquantes.length > 0, env = !!st.envoyeLe
-  const raison = bloque ? `Il manque ${c.bloquantes.length} pièce${c.bloquantes.length > 1 ? 's' : ''} obligatoire${c.bloquantes.length > 1 ? 's' : ''} : ${c.bloquantes.map((p) => p.nom).join(', ')}.` : ''
-  const prochaine = c.bloquantes[0] ?? c.recommandees[0], inv = st.invitation
+  const st = pieces.get(), c = compter(st.etat), pct = (c.faites / c.total) * 100, bloque = c.manquantes.length > 0, env = !!st.envoyeLe, corr = c.aCorriger.length > 0
+  const raison = bloque ? `Il manque ${c.manquantes.length} pièce${c.manquantes.length > 1 ? 's' : ''} obligatoire${c.manquantes.length > 1 ? 's' : ''} : ${c.manquantes.map((p) => p.nom).join(', ')}.` : ''
+  const prochaine = c.manquantes[0] ?? c.aCorriger[0] ?? c.recommandees[0], inv = st.invitation
   return `<div class="flex min-h-0 flex-col gap-3 overflow-y-auto pb-14"><div class="rounded-card border border-border bg-surface p-5 shadow-md"><p class="eyebrow">Complétude</p><div class="mt-3 flex items-center gap-4">${anneau(pct, 88, `${c.faites} ${c.faites > 1 ? 'pièces' : 'pièce'} sur ${c.total}`, `<span class="text-2xl font-bold tracking-tighter">${c.faites}<span class="text-base font-normal text-subtle">/${c.total}</span></span>`)}<div><p class="text-xl font-semibold tracking-tight"><span class="tabular">${c.faites}</span> ${c.faites > 1 ? 'pièces' : 'pièce'} sur <span class="tabular">${c.total}</span></p><p class="mt-0.5 text-sm text-muted">${c.faites === c.total ? 'Tout est prêt.' : `Il vous en reste ${c.total - c.faites}.`}</p></div></div>
-    ${prochaine ? `<div class="mt-4 border-t border-border pt-3"><h2 class="eyebrow">${bloque ? 'Prochaine pièce obligatoire' : 'Il reste une pièce recommandée'}</h2><button type="button" data-piece="${prochaine.id}" class="tr mt-2 flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-md bg-bg-soft px-3 text-left hover:bg-border"><span class="truncate text-sm font-semibold">${esc(prochaine.nom)}</span>${icon('arrow-right', 'size-4 shrink-0')}</button></div>` : ''}
-    <div class="mt-4">${env ? `<a href="/demande/envoyee" class="${btn('primary', 'lg', 'w-full')}">Voir le suivi de ma demande${icon('arrow-right', 'size-5')}</a>` : `<a href="/demande/recapitulatif" ${bloque ? `aria-disabled="true" title="${esc(raison)}"` : ''} class="${btn('primary', 'lg', 'w-full')}">Envoyer ma demande${icon('arrow-right', 'size-5')}</a>`}
-    ${!bloque && !env ? '<p class="mt-2 text-sm font-medium text-success">Toutes les pièces obligatoires sont prêtes.</p>' : ''}${bloque && !env ? `<p class="mt-2 text-xs leading-snug text-muted">Il manque ${c.bloquantes.length} pièce${c.bloquantes.length > 1 ? 's' : ''} obligatoire${c.bloquantes.length > 1 ? 's' : ''}. Choisissez-en une dans la liste.</p>` : ''}</div></div>
+    ${prochaine ? `<div class="mt-4 border-t border-border pt-3"><h2 class="eyebrow">${bloque ? 'Prochaine pièce obligatoire' : corr ? 'Pièce à corriger' : 'Il reste une pièce recommandée'}</h2><button type="button" data-piece="${prochaine.id}" class="tr mt-2 flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 rounded-md bg-bg-soft px-3 text-left hover:bg-border"><span class="truncate text-sm font-semibold">${esc(prochaine.nom)}</span>${icon('arrow-right', 'size-4 shrink-0')}</button></div>` : ''}
+    <div class="mt-4">${env ? `<a href="/demande/envoyee" class="${btn('primary', 'lg', 'w-full')}">Voir le suivi de ma demande${icon('arrow-right', 'size-5')}</a>` : `<a href="/demande/recapitulatif" ${bloque ? `aria-disabled="true" title="${esc(raison)}"` : ''} class="${btn('primary', 'lg', 'w-full')}">${corr && !bloque ? 'Envoyer quand même' : 'Envoyer ma demande'}${icon('arrow-right', 'size-5')}</a>`}
+    ${!bloque && !env && !corr ? '<p class="mt-2 text-sm font-medium text-success">Toutes les pièces obligatoires sont prêtes.</p>' : ''}${!bloque && !env && corr ? '<p class="mt-2 text-xs leading-snug text-muted">Une pièce est à corriger. Vous pouvez envoyer quand même : le chargé d’affaires vous la redemandera peut-être.</p>' : ''}${bloque && !env ? `<p class="mt-2 text-xs leading-snug text-muted">Il manque ${c.manquantes.length} pièce${c.manquantes.length > 1 ? 's' : ''} obligatoire${c.manquantes.length > 1 ? 's' : ''}. Choisissez-en une dans la liste.</p>` : ''}</div></div>
     <div class="rounded-card bg-bg-soft p-4"><div class="flex items-center gap-3"><span class="grid size-9 shrink-0 place-items-center rounded-sm bg-surface">${icon('user-plus')}</span><div class="min-w-0 flex-1"><h2 class="text-sm font-semibold tracking-tight">Inviter mon experte-comptable</h2><p class="text-xs text-muted">Pièces uniquement, sans le montant.</p></div>${!(inv && !inv.revoquee) ? `<button type="button" data-inviter class="${btn('secondary', 'sm')}">Inviter</button>` : ''}</div>${inv && !inv.revoquee ? `<div class="mt-3 flex flex-wrap items-center justify-between gap-2"><p class="text-sm"><span class="font-medium">${esc(inv.email)}</span><span class="block text-xs text-muted">Invitée le ${new Date(inv.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span></p><button type="button" data-revoquer class="${btn('ghost', 'sm')}">Révoquer l’accès</button></div>` : ''}</div></div>`
 }
 
@@ -71,7 +71,7 @@ function lateral() {
 function entete() {
   const st = pieces.get(), a = demande.get().answers, c = compter(st.etat)
   const f = financements.find((x) => x.id === (demande.get().financementId ?? 'pret-equipement-artisans'))
-  const consigne = c.bloquantes.length === 0 ? 'Toutes les pièces obligatoires sont prêtes. Vous pouvez envoyer votre demande.' : `Déposez les pièces obligatoires : il en reste ${c.bloquantes.length}. Quand elles sont prêtes, l’envoi se débloque.`
+  const consigne = c.manquantes.length > 0 ? `Déposez les pièces obligatoires : il en reste ${c.manquantes.length}. Quand elles sont prêtes, l’envoi se débloque.` : c.aCorriger.length ? 'Une pièce est à corriger. Vous pouvez la remplacer, ou envoyer quand même.' : 'Toutes les pièces obligatoires sont prêtes. Vous pouvez envoyer votre demande.'
   return `<header class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1"><div><h1 class="text-[clamp(1.5rem,2.4vw,2.125rem)] font-bold leading-tight tracking-tighter">${esc(f.nom)}<span class="font-normal text-muted">, ${esc(st.objet.toLowerCase())}${a.montant !== undefined ? `, <span class="tabular">${eur(a.montant)}</span>` : ''}</span></h1><p class="mt-1 text-[0.9375rem] text-muted" aria-live="polite">${consigne}</p></div><p class="tabular pb-1 text-sm text-subtle" role="status">${st.hors_ligne ? 'Enregistré sur cet appareil' : `Enregistré à ${st.savedAt}`}</p></header>`
 }
 function bannieres() {

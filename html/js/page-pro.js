@@ -69,7 +69,8 @@ function criteres(d) {
 function journal(d) {
   const plus = (iso, min) => new Date(new Date(iso).getTime() + min * 60000).toISOString()
   const relancesD = relances.get().items.filter((r) => (r.dossier ?? 'argile') === d.id)
-  const echanges = d.live ? evenements.get().items.filter((e) => e.name === 'aide_ia_utilisee').slice(0, 3).map((e) => ({ detail: `« ${QUESTIONS_IA[e.detail] ?? 'Question'} »`, iso: new Date(e.at).toISOString() })) : d.id === 'argile' ? [{ detail: '« Où trouver mon dernier bilan ? » Réponse appuyée sur la liste des pièces du financeur.', iso: '2026-11-02T13:52:00' }] : []
+  const vus = d.id === 'argile' ? evenements.get().items.filter((e) => e.name === 'aide_ia_utilisee').slice(0, 5).map((e) => ({ detail: `« ${QUESTIONS_IA[e.detail] ?? 'Question'} »`, iso: new Date(e.at).toISOString() })) : []
+  const echanges = vus.length ? vus : d.id === 'argile' ? [{ detail: '« Où trouver mon dernier bilan ? » Réponse appuyée sur la liste des pièces du financeur.', iso: '2026-11-02T13:52:00' }] : []
   const nonVides = d.c.faites > 0, tous = d.statut === 'pret'
   const base = [
     ...(tous && !relancesD.length ? [{ titre: 'Aucune relance nécessaire', detail: 'Toutes les pièces obligatoires étaient présentes à l’envoi.', iso: plus(d.envoyeLe, 3) }] : []),

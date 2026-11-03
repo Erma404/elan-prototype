@@ -179,3 +179,8 @@ Format : contexte, options, choix, raison.
 - Logo : l'audit demandait des capitales, mais la consigne ultérieure de l'utilisateur est de garder « élan » en minuscules. Le wordmark minuscule reste partout (en-tête, confirmation, Pro, favicon) ; la page de confirmation utilise désormais le wordmark et non le symbole seul.
 - Photos : l'avatar de Nicolas reste une photo (consigne ultérieure de l'utilisateur, contre l'audit). Les photos inutilisées sans rapport avec les personas (LEDGE) sont supprimées ; le fond de la hero est conservé.
 - Instruction : une fois « Instruire » cliqué, le bouton devient « Instruction faite » (désactivé), un écran de confirmation s'affiche, et le Journal reçoit « Instruction faite » avec l'heure à la seconde (HH:MM:SS).
+
+## D31 · Pièce à corriger : l'envoi reste possible (2026-11-03)
+- Une pièce « à corriger » ne bloque plus l'envoi. Seules les pièces obligatoires à fournir bloquent (`compter().manquantes`). `compter().aCorriger` alimente l'alerte.
+- Récapitulatif : alerte « Une pièce reste à corriger » (pièce, motif, conséquence : le chargé d'affaires la redemandera, instruction possiblement plus longue), bouton « Envoyer quand même », compteur « 6 sur 9, 1 à corriger ». Page Pièces : consigne et message d'aide alignés. Principe : l'IA alerte, l'humain décide.
+- Scénario « Une pièce à corriger » ouvre la pièce Bilans. « Commencer » (accueil) rétablit le persona Fabienne via `?depuis-accueil`. Journal Nicolas : les questions réelles posées à l'assistant apparaissent dès qu'elles existent. Logo de confirmation aligné sur la colonne de texte (mesuré, écart 0 px).
