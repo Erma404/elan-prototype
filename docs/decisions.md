@@ -145,3 +145,9 @@ Format : contexte, options, choix, raison.
 ## D25. Écran de bienvenue : le choix du profil passe dans l'en-tête
 - Choix : plus de sélecteur de profil sur la page. Restent le salut, une phrase et « Commencer ma demande », comme une vraie première connexion. Le changement de profil se fait par le bouton de profil de l'en-tête (présent sur tous les écrans), qui recharge l'accueil avec le bon salut.
 - Conséquence : pour un évaluateur, le changement de profil est un peu moins visible. Il reste aussi accessible depuis le panneau de démo (Maj + D).
+
+## D26. Portraits des profils et logo du cabinet expert-comptable
+- Portraits : deux photographies fournies par l'utilisatrice (Pexels) remplacent les initiales : la femme pour Fabienne, l'homme pour Nicolas. Recadrées en carré sur le visage et optimisées (`html/photos/fabienne.jpg`, `nicolas.jpg`, 320 px). Elles apparaissent dans le bouton de profil des en-têtes, le sélecteur de profil, l'écran de bienvenue et, pour Fabienne, la carte du hero (même visage partout, sinon le personnage change de tête d'un écran à l'autre).
+- Logo du cabinet (fictif, « Cabinet Ledoux & Associés ») : monogramme « L » en deux barres avec une cellule ambre, mot-symbole « LEDOUX » dessiné lettre par lettre (trait constant, aucune police), vert profond pour se distinguer d'Élan (`html/brand/cabinet-ledoux-marque.svg`, `cabinet-ledoux-logo.svg`). Il sert d'avatar à l'experte-comptable et d'identité sur sa vue de dépôt, sur une tuile blanche pour rester lisible en mode sombre.
+- Réserve : ce sont des photos de personnes réelles utilisées pour des personnages fictifs, associées à une phrase écrite pour le prototype (carte du hero). Acceptable pour une démonstration, à remplacer par des visuels libres de droits pour ce cas précis ou par de vrais témoignages avec accord pour un produit réel.
+- Crédits : photographies de Benoit Vacherie (Fabienne) et Oktay Köseoğlu (Nicolas), via Pexels.

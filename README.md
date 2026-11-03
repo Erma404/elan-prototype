@@ -55,3 +55,7 @@ npm run fit        # chaque écran tient dans la fenêtre sans défilement
 ```
 
 Résultats détaillés dans `docs/a11y.md`. La version React/TypeScript d'origine est conservée sur le tag Git `react-version`.
+
+## Crédits
+
+Photographies des profils : Benoit Vacherie (Fabienne) et Oktay Köseoğlu (Nicolas), via Pexels, licence Pexels. Autres photographies : assets fournis par l'équipe projet. Pictogrammes : Lucide (licence ISC). Police : Geist. Le logo du cabinet Ledoux & Associés est fictif.
