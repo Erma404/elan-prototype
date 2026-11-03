@@ -8,12 +8,12 @@ document.querySelector('[data-logo-hero]').innerHTML = logo('wordmark', 'h-9')
 monterDemo()
 const reduit = matchMedia('(prefers-reduced-motion: reduce)')
 const logoHero = $('#logo-hero')
-const hero = $('#hero'), scene = $('#scene'), photo = $('#photo'), img = $('#photo-img'), voile = $('#voile'), texte = $('#texte'), mention = $('#mention'), carte = $('#carte'), barre = $('#barre')
+const hero = $('#hero'), scene = $('#scene'), photo = $('#photo'), img = $('#photo-img'), voile = $('#voile'), texte = $('#texte'), carte = $('#carte'), barre = $('#barre')
 const lerp = (a, b, t) => a + (b - a) * Math.min(1, Math.max(0, t))
 let visible = false
 
 function appliquer() {
-  if (reduit.matches) { hero.className = 'relative'; scene.className = 'relative h-svh min-h-[40rem] overflow-hidden'; for (const e of [photo, img, voile, texte, mention, carte, logoHero]) e.removeAttribute('style'); logoHero.style.setProperty('--color-accent', '#C9A66B'); return }
+  if (reduit.matches) { hero.className = 'relative'; scene.className = 'relative h-svh min-h-[40rem] overflow-hidden'; for (const e of [photo, img, voile, texte, carte, logoHero]) e.removeAttribute('style'); logoHero.style.setProperty('--color-accent', '#C9A66B'); return }
   hero.className = 'relative h-[190svh]'; scene.className = 'sticky top-0 h-svh overflow-hidden'
   const max = hero.offsetHeight - innerHeight
   const p = max > 0 ? Math.min(1, Math.max(0, (scrollY - hero.offsetTop) / max)) : 0
@@ -22,7 +22,7 @@ function appliquer() {
   voile.style.opacity = lerp(0.45, 0.15, p)
   const f = Math.min(1, p / 0.55)
   texte.style.transform = `translateY(${lerp(0, -80, p / 0.6)}px)`; texte.style.opacity = 1 - f
-  mention.style.opacity = 1 - f; carte.style.opacity = 1 - Math.min(1, Math.max(0, (p - 0.1) / 0.4)); carte.style.transform = `translateY(${lerp(0, -40, p / 0.6)}px)`
+  carte.style.opacity = 1 - Math.min(1, Math.max(0, (p - 0.1) / 0.4)); carte.style.transform = `translateY(${lerp(0, -40, p / 0.6)}px)`
   // Le logo du hero s'efface quand la barre (avec son logo) prend le relais.
   logoHero.style.opacity = 1 - Math.min(1, Math.max(0, (p - 0.12) / 0.25)); logoHero.style.pointerEvents = p > 0.3 ? 'none' : ''; logoHero.tabIndex = p > 0.3 ? -1 : 0
   const v = p > 0.28

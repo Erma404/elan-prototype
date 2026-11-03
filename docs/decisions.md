@@ -156,3 +156,6 @@ Format : contexte, options, choix, raison.
 - Contexte : l'en-tête du hero était masqué au repos (comme la référence LEDGE), donc on ne savait pas où l'on se trouvait avant de scroller.
 - Choix : le logo Élan est affiché en haut à gauche, en blanc sur la photo (accent bronze éclairci pour garder le contraste). Il s'estompe entre 12 % et 37 % du scroll pendant que la barre fixe, qui porte aussi le logo, apparaît (à 28 %) : un logo reste visible à chaque position (balayage de 0 à 700 px par pas de 25 px).
 - Le menu de navigation reste absent du hero : une seule action (« Commencer »).
+
+## D28. Sous-titre du hero : la phrase de positionnement
+- Choix : « Le financement des petites entreprises, instruit par de vrais chargés d'affaires. » devient le sous-titre sous le H1, à la place du paragraphe décrivant le déroulé et de la mention en haut à gauche (supprimée pour ne pas la répéter). Le hero garde : logo, titre, sous-titre, « Commencer », « 5 questions • sans compte », carte de Fabienne.
