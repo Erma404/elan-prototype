@@ -170,3 +170,12 @@ Format : contexte, options, choix, raison.
   - Actions cohérentes : « Instruire » est l'action principale seulement si le dossier est complet ; sinon « Relancer » l'est et « Instruire » reste grisé avec sa raison écrite sous le bouton. « Demander une correction » n'apparaît que s'il y a des pièces à corriger.
   - Les pièces facultatives non fournies sont étiquetées « Facultative », pas « À fournir ».
 - Ajouts au registre des données inventées (D13) : entreprises, dirigeants, montants, numéros et dates des trois dossiers de la file.
+
+## D30 · Audit de l'écran Élan Pro (2026-11-03)
+- Dossier Atelier Argile & Feu toujours présent dans la file : 9/9, « Prêt à instruire », Instruire actif, indépendant de la session de Fabienne. Si elle envoie réellement sa demande, la fiche reprend ses vraies réponses et pièces. Le montant (42 000 €) du dossier semé est inventé (Fabienne ne renseigne pas de montant par défaut), à ajouter au registre D13.
+- Journal : cinq entrées réalistes pour Argile (échange avec l'assistant visible, demande reçue, pièces vérifiées, critères contrôlés, aucune relance).
+- L'étiquette « Vague 2 » quitte l'interface : elle est expliquée dans le panneau de démo (onglet Mesure) et ici. Vague 2 = file triée par complétude (E3.5), relance en un clic (E3.4), vérification IA (E2.9).
+- Colonnes : plus de troncature, le texte passe à la ligne ; hauteur de la liste de gauche contrainte (défilement interne, plus de dossier coupé).
+- Logo : l'audit demandait des capitales, mais la consigne ultérieure de l'utilisateur est de garder « élan » en minuscules. Le wordmark minuscule reste partout (en-tête, confirmation, Pro, favicon) ; la page de confirmation utilise désormais le wordmark et non le symbole seul.
+- Photos : l'avatar de Nicolas reste une photo (consigne ultérieure de l'utilisateur, contre l'audit). Les photos inutilisées sans rapport avec les personas (LEDGE) sont supprimées ; le fond de la hero est conservé.
+- Instruction : une fois « Instruire » cliqué, le bouton devient « Instruction faite » (désactivé), un écran de confirmation s'affiche, et le Journal reçoit « Instruction faite » avec l'heure à la seconde (HH:MM:SS).
