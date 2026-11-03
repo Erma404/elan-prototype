@@ -15,6 +15,7 @@ const QUESTIONS_IA = Object.fromEntries([...PIECES.flatMap((p) => p.suggestions)
 const jour = (iso) => new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
 const heure = (iso) => new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })
 const PREUVE = { projet: 'devis', effectif: null, anciennete: 'kbis', montant: 'devis', secteur: 'kbis' }
+const minus = (t) => t.charAt(0).toLowerCase() + t.slice(1)
 const heureS = (iso) => new Date(iso).toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', second: '2-digit' })
 const instruit = (d) => relances.get().items.some((r) => (r.dossier ?? 'argile') === d.id && r.type === 'instruction')
 let onglet = 'criteres', ouvert = null
@@ -49,7 +50,7 @@ const courant = () => dossiers().find((d) => d.id === idUrl) ?? dossiers()[0]
 
 /** Messages de Nicolas. Jamais « il manque 0 pièce » : dossier complet → confirmation ; incomplet → pièces listées. */
 function message(kind, d) {
-  const liste = (l) => l.map((p) => `- ${p.nom}`).join('\n'), aC = d.aCorriger.map((p) => `- ${p.nom} : ${d.etat[p.id].message}`).join('\n'), n = d.manque.length
+  const liste = (l) => l.map((p) => `- ${p.nom}`).join('\n'), aC = d.aCorriger.map((p) => `- ${p.nom} : ${minus(d.etat[p.id].message)}`).join('\n'), n = d.manque.length
   if (kind === 'confirmation') return 'Bonjour,\n\nVotre dossier est complet : toutes les pièces obligatoires sont là et vérifiées. Nous démarrons l’instruction, vous serez prévenu·e à chaque étape.\n\nCordialement, Nicolas B.'
   if (kind === 'correction') return `Bonjour,\n\nUne correction est nécessaire :\n${aC}\n\nVous pouvez remplacer le fichier directement dans votre demande.\n\nCordialement, Nicolas B.`
   return `Bonjour,\n\n${n > 0 ? `Pour instruire votre demande, il nous manque ${n === 1 ? 'une pièce' : `${n} pièces`} :\n${liste(d.manque)}\n` : ''}${d.aCorriger.length ? `\n${d.aCorriger.length === 1 ? 'Une pièce est à corriger' : 'Des pièces sont à corriger'} :\n${aC}\n` : ''}\nVous pouvez les déposer depuis votre demande, l’assistant vous aide à les trouver.\n\nCordialement, Nicolas B.`

@@ -20,7 +20,7 @@ function rendre() {
   <header class="mx-auto flex h-20 w-full max-w-[88rem] items-center justify-between px-5 sm:px-8"><a href="/" aria-label="Élan, accueil">${logo('wordmark', 'h-8')}</a><div class="flex items-center gap-2">${boutonDemo()}${boutonProfil()}</div></header>
   <main id="contenu" class="mx-auto flex w-full max-w-[64rem] flex-1 flex-col justify-center px-5 pb-16 sm:px-8">${avatar(id, 'size-20')}<p class="eyebrow mt-6">Bienvenue</p>
     <h1 tabindex="-1" class="mt-6 text-[clamp(2.75rem,7vw,5.5rem)] font-light leading-[1.02] tracking-[-0.03em] outline-none">${esc(p.salut)}</h1><p class="mt-6 max-w-2xl text-xl leading-relaxed text-muted">${esc(p.texte)}</p>
-    <div class="mt-9 flex flex-wrap items-center gap-4"><a href="${p.url}" class="${btn('primary', 'lg')}">${commence ? 'Reprendre ma demande' : esc(p.cta)}${icon('arrow-right', 'size-5')}</a>${commence ? `<a href="/eligibilite" class="${btn('ghost', 'lg')}">Recommencer</a>` : ''}</div>
+    <div class="mt-9 flex flex-wrap items-center gap-4"><a href="${p.url}" class="${btn('primary', 'lg')}">${commence ? 'Reprendre ma demande' : esc(p.cta)}${icon('arrow-right', 'size-5')}</a>${commence ? `<a href="/eligibilite?recommencer" class="${btn('ghost', 'lg')}">Recommencer</a>` : ''}</div>
 </main>
   <footer class="px-5 py-6 text-center sm:px-8"><p class="text-sm text-muted">Prototype, données fictives</p></footer>`
   monterDemo()

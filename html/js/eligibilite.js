@@ -7,6 +7,8 @@ import { QUESTIONS } from './questions.js'
 import { retenus, ecartes, leCritereManquant, explicationTete, alternatives, REFERENTIEL } from './engine.js'
 
 const TOTAL = QUESTIONS.length
+// « Recommencer » depuis l’écran Bonjour : réponses effacées, retour à la question 1.
+if (new URLSearchParams(location.search).has('recommencer')) { demande.set({ answers: {}, step: 0, financementId: null }); history.replaceState(null, '', '/eligibilite') }
 const main = monterCoque({ step: 0, titre: 'Éligibilité' })
 const S = () => demande.get()
 const complet = () => QUESTIONS.every((q) => S().answers[q.key] !== undefined)

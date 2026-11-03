@@ -129,4 +129,24 @@ p = await page(); await p.goto(B + '/demande/envoyee', { waitUntil: 'networkidle
 const al = await p.evaluate(() => Math.min(...[...document.querySelector('section svg').querySelectorAll('path')].map((x) => x.getBoundingClientRect().left)) - document.querySelector('h1').getBoundingClientRect().left);
 ok(`confirmation : logo aligné sur le texte (écart ${al.toFixed(1)} px)`, Math.abs(al) < 1.5);
 
+
+// 12. Recommencer efface les réponses et repart à la question 1 ; minuscule après les deux-points
+p = await page(); await p.goto(B + '/eligibilite', { waitUntil: 'networkidle' }); await p.locator('#continuer').click(); await p.waitForTimeout(200); await p.locator('#continuer').click(); await p.waitForTimeout(200);
+await p.goto(B + '/bonjour', { waitUntil: 'networkidle' }); await p.getByRole('link', { name: 'Recommencer' }).click(); await p.waitForURL('**/eligibilite'); await p.waitForLoadState('networkidle');
+const rep = await p.evaluate(() => JSON.parse(localStorage.getItem('elan:demande:html') ?? '{}'));
+ok('« Recommencer » : réponses effacées, retour à la question 1', (await p.locator('#question').innerText()).length > 0 && (rep.step ?? 0) === 0 && Object.keys(rep.answers ?? {}).length === 0 && p.url().endsWith('/eligibilite'));
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-scenario="corriger"]').click(); await p.waitForURL('**/demande/pieces'); await p.goto(B + '/demande/recapitulatif', { waitUntil: 'networkidle' });
+ok('récapitulatif : minuscule après les deux-points (« : la page 2 du bilan… »)', (await p.locator('main').innerText()).includes(': la page 2 du bilan'));
+p = await page(); await p.goto(B + '/pro/dossiers/boulangerie', { waitUntil: 'networkidle' }); await p.locator('[data-msg="relance"]').click(); await p.waitForTimeout(300);
+ok('message de relance : minuscule après les deux-points', /: la page 2 du bilan est manquante/.test(await p.locator('#msg').inputValue()));
+// 13. Vrai usage de l'assistant côté Fabienne (pas d'injection) puis journal de Nicolas
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' });
+await p.getByRole('button', { name: /Une question sur cette pièce/ }).click(); await p.waitForTimeout(300);
+const q = p.locator('[data-q]').first(); const qt = (await q.innerText()).trim(); await q.click(); await p.waitForTimeout(900);
+await p.keyboard.press('Escape'); await demo(p); await p.locator('[data-scenario="pret"]').click(); await p.waitForURL('**/demande/pieces'); await p.goto(B + '/demande/recapitulatif', { waitUntil: 'networkidle' });
+await p.locator('#consent').check(); await p.getByRole('button', { name: /Envoyer ma demande/ }).click(); await p.waitForURL('**/demande/envoyee', { timeout: 8000 });
+await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' }); await p.locator('#t-journal').click();
+const jr = await p.locator('#v-journal').innerText();
+ok('journal Nicolas : « Échange avec l’assistant » après un vrai usage par Fabienne (' + qt.slice(0, 40) + ')', jr.includes('Échange avec l’assistant') && jr.includes(qt.replace(/[«»]/g, '').trim().slice(0, 25)));
+
 console.log(errs.length ? 'ERREURS CONSOLE :\n' + [...new Set(errs)].join('\n') : 'console propre'); console.log(ko ? `${ko} échec(s)` : 'toutes les vérifications passent'); await b.close(); process.exit(ko ? 1 : 0);
