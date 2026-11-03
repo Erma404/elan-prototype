@@ -12,7 +12,8 @@
     "axe": "node scripts/axe.mjs",
     "fit": "node scripts/fit.mjs",
     "verif": "node scripts/verif-html.mjs",
-    "shots": "node scripts/shots.mjs"
+    "shots": "node scripts/shots.mjs",
+    "favicon": "node scripts/build-favicon.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

@@ -18,7 +18,7 @@ Couleurs : encre `#1F1E1B` (`#F3F0E8` en sombre), accent bronze `#8F6D2E` (`#C9A
 
 ## Livrables (`html/brand/`)
 
-`logo-mark*.svg` (é seul), `logo-wordmark*.svg` et `logo-lockup*.svg` (« élan »), en clair, sombre, monochrome et monochrome blanc ; `favicon.svg` (suit le thème), `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png` ; `logo-mark-animated.svg` (480 ms de révélation puis 320 ms pour l'accent, 800 ms au total, statique avec `prefers-reduced-motion`).
+`logo-mark*.svg` (é seul), `logo-wordmark*.svg` et `logo-lockup*.svg` (« élan »), en clair, sombre, monochrome et monochrome blanc ; `favicon.svg` (tuile pleine, inversée en mode sombre), `favicon.ico` (16, 32, 48), `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png` (régénérés par `npm run favicon`) ; `logo-mark-animated.svg` (480 ms de révélation puis 320 ms pour l'accent, 800 ms au total, statique avec `prefers-reduced-motion`).
 
 ## Zone de protection et taille minimale
 
@@ -27,3 +27,7 @@ Zone de protection : 8 unités. Taille minimale : symbole 16 px de haut, mot-sym
 ## Historique
 
 Une première série (arc et point, fusion a+n, hampe décalée) a été détruite ; une seconde (monogramme É et capitales fines) a été remplacée après comparaison avec le wordmark de la référence LEDGE (trait d'environ 0,11 de la hauteur de capitale) puis avec les variantes ci-dessus.
+
+## Favicon
+
+Révision : le « é » seul sur fond transparent était fin et presque invisible dans un onglet sombre. Il est maintenant sur une tuile pleine (encre et « é » crème en clair ; crème et « é » encre en sombre), avec l'accent bronze. Aperçus : `docs/screens/favicon-light.png` et `favicon-dark.png`.
