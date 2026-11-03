@@ -151,3 +151,8 @@ Format : contexte, options, choix, raison.
 - Logo du cabinet (fictif, « Cabinet Ledoux & Associés ») : monogramme « L » en deux barres avec une cellule ambre, mot-symbole « LEDOUX » dessiné lettre par lettre (trait constant, aucune police), vert profond pour se distinguer d'Élan (`html/brand/cabinet-ledoux-marque.svg`, `cabinet-ledoux-logo.svg`). Il sert d'avatar à l'experte-comptable et d'identité sur sa vue de dépôt, sur une tuile blanche pour rester lisible en mode sombre.
 - Réserve : ce sont des photos de personnes réelles utilisées pour des personnages fictifs, associées à une phrase écrite pour le prototype (carte du hero). Acceptable pour une démonstration, à remplacer par des visuels libres de droits pour ce cas précis ou par de vrais témoignages avec accord pour un produit réel.
 - Crédits : photographies de Benoit Vacherie (Fabienne) et Oktay Köseoğlu (Nicolas), via Pexels.
+
+## D27. Logo visible dès le chargement du hero
+- Contexte : l'en-tête du hero était masqué au repos (comme la référence LEDGE), donc on ne savait pas où l'on se trouvait avant de scroller.
+- Choix : le logo Élan est affiché en haut à gauche, en blanc sur la photo (accent bronze éclairci pour garder le contraste). Il s'estompe entre 12 % et 37 % du scroll pendant que la barre fixe, qui porte aussi le logo, apparaît (à 28 %) : un logo reste visible à chaque position (balayage de 0 à 700 px par pas de 25 px).
+- Le menu de navigation reste absent du hero : une seule action (« Commencer »).
