@@ -161,3 +161,12 @@ Format : contexte, options, choix, raison.
 - Choix : « Le financement des petites entreprises, instruit par de vrais chargés d'affaires. » devient le sous-titre sous le H1, à la place du paragraphe décrivant le déroulé et de la mention en haut à gauche (supprimée pour ne pas la répéter). Le hero garde : logo, titre, sous-titre, « Commencer », « 5 questions • sans compte », carte de Fabienne.
 - Prolongement : une seconde phrase (« Cinq questions, vos pièces expliquées une à une, un dossier prêt à instruire. ») équilibre visuellement le titre : sous-titre sur trois lignes face à un titre sur deux. Espaces insécables pour éviter les coupures disgracieuses (« une à / une »).
 - Retrait de la ligne « 5 questions • sans compte » sous le bouton : redondante avec « Cinq questions » du sous-titre. Le hero ne contient plus aucune promesse de durée ni d'absence de compte.
+
+## D29. Élan Pro : une file de dossiers reçus, une fiche complète pour chacun
+- Contexte : Nicolas arrivait sur le dossier de Fabienne alors qu'elle ne l'avait pas envoyé (0 pièce sur 9, « Incomplet », « Instruire » grisé), et les autres dossiers de la file n'étaient que des cartes renvoyant vers celui d'Atelier Argile & Feu.
+- Choix :
+  - La file ne contient que des dossiers envoyés. Celui de Fabienne y arrive après son envoi, marqué « Nouveau ». Avant, l'adresse de son dossier redirige vers le dossier le plus actionnable.
+  - Trois dossiers fictifs reçus, chacun avec une fiche complète : Menuiserie Verdier (9/9, prêt à instruire), Boulangerie des Halles (7/9, 2 pièces à corriger), Studio Lumen (5/9, 2 pièces à fournir). Noms et montants inventés.
+  - Actions cohérentes : « Instruire » est l'action principale seulement si le dossier est complet ; sinon « Relancer » l'est et « Instruire » reste grisé avec sa raison écrite sous le bouton. « Demander une correction » n'apparaît que s'il y a des pièces à corriger.
+  - Les pièces facultatives non fournies sont étiquetées « Facultative », pas « À fournir ».
+- Ajouts au registre des données inventées (D13) : entreprises, dirigeants, montants, numéros et dates des trois dossiers de la file.

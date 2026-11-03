@@ -17,7 +17,7 @@ export function suivre(name, detail) { evenements.set((s) => ({ items: [{ id: Da
 
 // ---------- Relances et actions de Nicolas ----------
 export const relances = creerStore('elan:relances:html', () => ({ items: [] }))
-export const ajouterRelance = (type, texte) => relances.set((s) => ({ items: [{ id: Date.now(), date: new Date().toISOString(), type, texte }, ...s.items] }))
+export const ajouterRelance = (type, texte, dossier = 'argile') => relances.set((s) => ({ items: [{ id: Date.now(), date: new Date().toISOString(), type, texte, dossier }, ...s.items] }))
 
 // ---------- Pièces ----------
 const hhmm = () => new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })

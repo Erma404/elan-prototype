@@ -57,23 +57,30 @@ p = await page(); await p.goto(B + '/bonjour', { waitUntil: 'networkidle' });
 ok('bienvenue : « Bonjour Fabienne. » par défaut', (await p.locator('h1').innerText()).includes('Bonjour Fabienne'));
 ok('bienvenue : aucun sélecteur de profil sur la page, seulement le salut et « Commencer ma demande »', (await p.locator('[role=radiogroup]').count()) === 0 && (await p.getByRole('link', { name: /Commencer ma demande/ }).count()) === 1);
 await p.locator('[data-profil]').click(); await p.locator('[data-profil-choix="nicolas"]').click(); await p.waitForLoadState('networkidle'); ok('bienvenue : « Bonjour Nicolas. » après changement de profil par le bouton de l’en-tête', (await p.locator('h1').innerText()).includes('Bonjour Nicolas'));
-await p.getByRole('link', { name: /Voir mes dossiers/ }).click(); await p.waitForURL('**/pro/dossiers/argile'); ok('bienvenue : Nicolas arrive sur ses dossiers', true);
+await p.getByRole('link', { name: /Voir mes dossiers/ }).click(); await p.waitForURL('**/pro/dossiers/menuiserie'); ok('bienvenue : Nicolas arrive sur le dossier le plus actionnable (Menuiserie Verdier, prêt à instruire)', (await p.locator('h1').innerText()).includes('Menuiserie'));
 ok('le bouton de profil est visible dans l’en-tête d’Élan Pro', await p.locator('[data-profil]').isVisible());
 await p.locator('[data-profil]').click(); await p.locator('[data-profil-choix="fabienne"]').click(); await p.waitForURL('**/bonjour'); ok('changer de profil depuis l’en-tête ramène à l’accueil du profil', (await p.locator('h1').innerText()).includes('Bonjour Fabienne'));
 await p.getByRole('link', { name: /Commencer ma demande/ }).click(); await p.waitForURL('**/eligibilite'); ok('bienvenue : « Commencer ma demande » démarre le parcours', await p.locator('[data-profil]').isVisible());
 
-// 4 ter. Messages de relance de Nicolas : jamais « 0 pièce »
+// 4 ter. Élan Pro : la file ne contient que des dossiers envoyés ; actions et messages cohérents
 p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-scenario="cours"]').click(); await p.waitForURL('**/demande/pieces');
-await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' }); ok('profil affiché : Nicolas sur Élan Pro', (await p.locator('[data-profil]').getAttribute('aria-label')).includes('Nicolas'));
-await p.getByRole('button', { name: 'Relancer', exact: true }).click(); const incomplet = await p.locator('dialog #msg').inputValue();
-ok('relance (dossier incomplet) : liste la pièce manquante, aucun « 0 pièce »', incomplet.includes('Bilans') && !/\b0 pièce/.test(incomplet)); await p.keyboard.press('Escape');
-await demo(p); await p.locator('[data-scenario="pret"]').click(); await p.waitForURL('**/demande/pieces'); await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' });
-ok('dossier complet : « Relancer » remplacé par « Confirmer la réception »', (await p.getByRole('button', { name: 'Relancer', exact: true }).count()) === 0 && (await p.getByRole('button', { name: 'Confirmer la réception' }).count()) === 1);
+await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' });
+ok('dossier non envoyé : absent de la file de Nicolas, redirection vers un dossier reçu', p.url().endsWith('/menuiserie') && !(await p.locator('nav[aria-label="Dossiers à instruire"]').innerText()).includes('Atelier Argile'));
+ok('profil affiché : Nicolas sur Élan Pro', (await p.locator('[data-profil]').getAttribute('aria-label')).includes('Nicolas'));
+ok('dossier complet : « Prêt à instruire », Instruire actif, « Relancer » remplacé par « Confirmer la réception »', (await p.locator('h1 ~ span, h1').first().innerText()).includes('Menuiserie') && (await p.getByRole('button', { name: 'Instruire', exact: true }).getAttribute('aria-disabled')) === null && (await p.getByRole('button', { name: 'Relancer', exact: true }).count()) === 0 && (await p.getByRole('button', { name: 'Confirmer la réception' }).count()) === 1);
 await p.getByRole('button', { name: 'Confirmer la réception' }).click(); const complet = await p.locator('dialog #msg').inputValue(); ok('message de confirmation : « dossier est complet », aucun « il manque »', complet.includes('complet') && !/manque/i.test(complet)); await p.keyboard.press('Escape');
+await p.goto(B + '/pro/dossiers/studio', { waitUntil: 'networkidle' });
+ok('dossier incomplet : Relancer est l’action principale, Instruire grisé avec sa raison écrite', (await p.getByRole('button', { name: 'Instruire', exact: true }).getAttribute('aria-disabled')) === 'true' && (await p.locator('#raison-instruire').innerText()).includes('Instruire sera possible'));
+await p.getByRole('button', { name: 'Relancer', exact: true }).click(); const incomplet = await p.locator('dialog #msg').inputValue(); ok('relance (dossier incomplet) : liste les pièces manquantes, aucun « 0 pièce »', incomplet.includes('RIB') && incomplet.includes('Devis') && !/\b0 pièce/.test(incomplet)); await p.keyboard.press('Escape');
+ok('dossier incomplet : pas de « Demander une correction » quand rien n’est à corriger', (await p.getByRole('button', { name: 'Demander une correction' }).count()) === 0);
+await p.goto(B + '/pro/dossiers/boulangerie', { waitUntil: 'networkidle' }); await p.getByRole('button', { name: 'Demander une correction' }).click(); const corr = await p.locator('dialog #msg').inputValue();
+ok('correction : cite chaque pièce et son motif', corr.includes('Bilans') && corr.includes('page 2') && corr.includes('Attestation') && corr.includes('illisible')); await p.keyboard.press('Escape');
+await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-scenario="apres"]').click(); await p.waitForURL('**/demande/envoyee'); await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' });
+ok('dossier envoyé par Fabienne : il arrive dans la file avec « Nouveau »', p.url().endsWith('/argile') && (await p.locator('nav[aria-label="Dossiers à instruire"]').innerText()).includes('Nouveau'));
 
 // 5. Mobile 390 px : pas de débordement horizontal
 p = await page({ width: 390, height: 844 });
-for (const r of ['/', '/bonjour', '/eligibilite', '/demande/pieces', '/demande/recapitulatif', '/demande/envoyee', '/expert/demo', '/pro/dossiers/argile', '/styleguide']) {
+for (const r of ['/', '/bonjour', '/eligibilite', '/demande/pieces', '/demande/recapitulatif', '/demande/envoyee', '/expert/demo', '/pro/dossiers/menuiserie', '/styleguide']) {
   await p.goto(B + r, { waitUntil: 'networkidle' }); await p.waitForTimeout(300);
   const m = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
   ok(`mobile 390 px ${r} : pas de défilement horizontal (${m.sw}/${m.cw})`, m.sw <= m.cw + 1); await p.screenshot({ path: `docs/screens/m390-${r.replace(/\W+/g, '_') || 'accueil'}.png`, fullPage: false });
@@ -81,7 +88,7 @@ for (const r of ['/', '/bonjour', '/eligibilite', '/demande/pieces', '/demande/r
 
 // 6. Mode sombre
 p = await page({ width: 1280, height: 720 }, { colorScheme: 'dark' });
-for (const r of ['/eligibilite', '/demande/pieces', '/pro/dossiers/argile']) { await p.goto(B + r, { waitUntil: 'networkidle' }); await p.waitForTimeout(300); ok(`mode sombre ${r} : thème appliqué`, (await p.evaluate(() => document.documentElement.dataset.theme)) === 'dark'); await p.screenshot({ path: `docs/screens/sombre-${r.replace(/\W+/g, '_')}.png` }) }
+for (const r of ['/eligibilite', '/demande/pieces', '/pro/dossiers/menuiserie']) { await p.goto(B + r, { waitUntil: 'networkidle' }); await p.waitForTimeout(300); ok(`mode sombre ${r} : thème appliqué`, (await p.evaluate(() => document.documentElement.dataset.theme)) === 'dark'); await p.screenshot({ path: `docs/screens/sombre-${r.replace(/\W+/g, '_')}.png` }) }
 
 // 7. Navigation clavier complète (éligibilité → pièces)
 p = await page(); await p.goto(B + '/eligibilite', { waitUntil: 'networkidle' });

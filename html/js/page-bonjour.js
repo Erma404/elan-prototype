@@ -8,7 +8,7 @@ import { complete, PIECES } from './pieces.js'
 
 const PROFILS = {
   fabienne: { salut: 'Bonjour Fabienne.', texte: 'Prête à démarrer votre demande ?', cta: 'Commencer ma demande', url: '/eligibilite', nom: 'Fabienne', role: 'Dirigeante, atelier de céramique' },
-  nicolas: { salut: 'Bonjour Nicolas.', texte: 'Vos dossiers vous attendent.', cta: 'Voir mes dossiers', url: '/pro/dossiers/argile', nom: 'Nicolas', role: 'Chargé d’affaires, instruit les demandes' },
+  nicolas: { salut: 'Bonjour Nicolas.', texte: 'Vos dossiers vous attendent.', cta: 'Voir mes dossiers', url: '/pro/dossiers', nom: 'Nicolas', role: 'Chargé d’affaires, instruit les demandes' },
   experte: { salut: 'Bonjour.', texte: 'Fabienne M. vous a invitée à déposer des pièces.', cta: 'Déposer les pièces', url: '/expert/demo', nom: 'Experte-comptable', role: 'Invitée par Fabienne pour déposer des pièces' },
 }
 const racine = $('#racine'); racine.className = 'relative flex min-h-dvh flex-col bg-bg text-text'; document.title = 'Bonjour · Élan'

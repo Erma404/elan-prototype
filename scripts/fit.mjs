@@ -8,7 +8,7 @@ const cas = [
   { nom: 'pièces, premier accès', path: '/demande/pieces', ls: {} },
   { nom: 'récapitulatif', path: '/demande/recapitulatif', ls: {} },
   { nom: 'confirmation', path: '/demande/envoyee', ls: {} },
-  { nom: 'Élan Pro, fiche', path: '/pro/dossiers/argile', ls: {} },
+  { nom: 'Élan Pro, fiche', path: '/pro/dossiers/menuiserie', ls: {} },
   { nom: 'experte-comptable', path: '/expert/demo', ls: {} },
 ];
 const b = await chromium.launch(); let ko = 0;
