@@ -166,4 +166,19 @@ p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle'
 await p.locator('[data-groupe]').click(); await p.locator('#multi').setInputFiles([f('Kbis-atelier.pdf')]); await p.waitForTimeout(200);
 ok('dépôt groupé, assistant indisponible : aucun classement proposé, association à la main', (await p.locator('#s-0').inputValue()) === '' && /à associer/.test(await p.locator('#groupe').innerText()));
 
+
+// 15. Formulaire : montant saisi hors fourchette refusé avec message, bouton reste inactif
+p = await page(); await p.goto(B + '/eligibilite', { waitUntil: 'networkidle' }); for (let i = 0; i < 3; i++) { await p.locator('#continuer').click(); await p.waitForTimeout(150) }
+await p.locator('#saisie').fill('12'); await p.locator('#saisie').blur(); await p.waitForTimeout(150);
+ok('formulaire : montant hors fourchette refusé avec message, bouton inactif, en-tête « à préciser »', /entre 5\s?000/.test(await p.locator('#erreur-montant').innerText()) && (await p.locator('#continuer').getAttribute('aria-disabled')) === 'true' && /à préciser/.test(await p.locator('#montant-entete').innerText()));
+await p.locator('#saisie').fill('60000'); await p.waitForTimeout(150); ok('formulaire : montant valide accepté, message effacé', (await p.locator('#erreur-montant').isHidden()) && (await p.locator('#continuer').getAttribute('aria-disabled')) === 'false');
+
+
+// 16. Écran Pièces en fenêtre réduite : la liste défile en interne, rien ne se chevauche, pas de défilement de page
+for (const [w, h] of [[1024, 600], [1100, 640], [1280, 500]]) {
+  p = await page({ width: w, height: h }); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' });
+  const r = await p.evaluate(() => { const l = document.querySelector('#liste nav').getBoundingClientRect(), i = document.querySelector('#invitation').getBoundingClientRect(); return { chevauche: l.bottom > i.top + 1, page: document.documentElement.scrollHeight > innerHeight } });
+  ok(`pièces ${w}×${h} : liste et invitation sans chevauchement, pas de défilement de page`, !r.chevauche && !r.page);
+}
+
 console.log(errs.length ? 'ERREURS CONSOLE :\n' + [...new Set(errs)].join('\n') : 'console propre'); console.log(ko ? `${ko} échec(s)` : 'toutes les vérifications passent'); await b.close(); process.exit(ko ? 1 : 0);

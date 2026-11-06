@@ -207,3 +207,9 @@ Format : contexte, options, choix, raison.
 - Retour utilisateur sur le formulaire en une page : « 1 question = 1 écran ». D34 (éligibilité en une page) est annulé pour cette partie. Le dépôt groupé des pièces est conservé.
 - Chaque question est un écran centré : progression discrète « 2 sur 5 », grand titre léger, réponses en pastilles arrondies pleine largeur, un bouton rond « Continuer » (« Voir mes financements » à la dernière). Toujours aucune avance automatique après une réponse. Retour possible, Entrée valide, touches 1 à 5 choisissent, flèches dans le groupe. Le montant reste visible dans l'en-tête.
 - Le panneau latéral « Financements possibles » reste retiré (écran plus épuré).
+
+## D36 · Écran Pièces apaisé, pictogrammes du résultat, source retirée (2026-11-06)
+- Retour : « cacophonie » sur l'écran Pièces en fenêtre réduite. Refonte : deux colonnes au lieu de trois (liste à gauche avec le résumé d'avancement en haut et l'invitation de l'expert-comptable en bas, détail à droite). Les actions d'en-tête sont « Déposer plusieurs documents » et « Envoyer ma demande » (une seule principale à la fois). Titres de section en texte discret (plus de petites capitales à point), statut affiché seulement quand il informe (plus de « À fournir » répété), zone de dépôt allégée, corps du détail défilant.
+- Bug corrigé : en fenêtre réduite, la liste passait sous « Inviter mon experte-comptable ». Test de non-chevauchement ajouté (1024×600, 1100×640, 1280×500).
+- Résultat d'éligibilité : pictogrammes ajoutés (montant, délai, assistant, pastilles de validation, actions avec icônes).
+- « Source : Référentiel Élan, v1 » retiré de l'écran de résultat sur demande. Le garde-fou « l'assistant cite sa source » reste porté par les réponses de l'assistant sur l'écran Pièces ; à reconfirmer si la mention doit revenir.
