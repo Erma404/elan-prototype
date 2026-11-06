@@ -33,7 +33,7 @@ export function monterCoque({ step, fit = true, wide = true, titre }) {
         <div class="flex items-center gap-3">
           <p id="montant-entete" class="hidden items-center gap-3 rounded-md border border-border bg-surface px-4 py-1.5 md:flex" aria-label="Montant souhaité"><span class="eyebrow !tracking-[0.1em] before:!hidden">Montant souhaité</span><span class="tabular text-2xl font-bold leading-none tracking-tighter" data-montant>${montantHtml()}</span></p>
           ${boutonDemo()}
-          <button type="button" id="reinit" class="${btn('ghost', 'sm', 'hidden sm:inline-flex')}">Réinitialiser</button>
+          <button type="button" id="reinit" class="${btn('ghost', 'sm', ui.get().demoVisible ? 'hidden sm:inline-flex' : 'hidden')}">Réinitialiser</button>
           <button type="button" id="aide" class="${btn('ghost', 'sm')}" aria-label="Aide">${icon('life-buoy')}<span class="hidden sm:inline">Aide</span></button>
           ${boutonProfil()}
         </div>

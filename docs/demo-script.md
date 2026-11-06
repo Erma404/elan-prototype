@@ -1,5 +1,7 @@
 # Script de la vidéo de démonstration (3 minutes)
 
+> Pour présenter : Maj + D ouvre le panneau de démo (ou ajouter `?demo` à l’adresse, utile sur mobile). Par défaut, l’interface n’affiche ni bandeau, ni bouton Démo, ni Réinitialiser.
+
 Aligné sur la visite guidée du panneau de démo (Démo, puis « Lancer la visite guidée », ou Maj + D). Chaque étape avance seule après 22 secondes, avec Pause, Retour et Quitter.
 
 | Temps | Écran | Action | Phrase à dire |

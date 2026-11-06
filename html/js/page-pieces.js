@@ -107,7 +107,7 @@ main.addEventListener('click', (e) => {
   if (t.closest('[data-annuler-na]')) return patch(selection, { statut: 'a-fournir', raison: undefined })
   if (t.closest('[data-moi-meme]')) return patch(selection, { statut: 'a-fournir' })
   if (t.closest('[data-na]')) return nonApplicable(p)
-  if (t.closest('[data-exemple]')) return modale({ titre: `Exemple : ${p.nom}`, description: 'Document fictif, pour savoir ce qu’on attend.', corps: `<div class="grid place-items-center py-2">${documentExemple(p)}</div>`, pied: `<button type="button" data-fermer class="${btn('secondary')}">Fermer</button>` }).ouvrir()
+  if (t.closest('[data-exemple]')) return modale({ titre: `Exemple : ${p.nom}`, description: 'Pour savoir ce qu’on attend.', corps: `<div class="grid place-items-center py-2">${documentExemple(p)}</div>`, pied: `<button type="button" data-fermer class="${btn('secondary')}">Fermer</button>` }).ouvrir()
   const ai = t.closest('[data-aide]'); if (ai) return assistant(ai.dataset.aide)
   if (t.closest('[data-inviter]')) return invitation()
   if (t.closest('[data-revoquer]')) return revoquer()

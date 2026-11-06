@@ -9,7 +9,7 @@ export const demande = creerStore('elan:demande:html', () => ({ answers: { ...FA
 export const setReponse = (k, v) => demande.set((s) => ({ answers: { ...s.answers, [k]: v } }))
 
 // ---------- Interface et démonstration ----------
-export const ui = creerStore('elan:ui:html', () => ({ bandeauMasque: false, persona: 'fabienne' }))
+export const ui = creerStore('elan:ui:html:v2', () => ({ bandeauMasque: true, demoVisible: false, persona: 'fabienne' }))
 
 // ---------- Journal des événements (panneau Mesure) ----------
 export const evenements = creerStore('elan:events:html', () => ({ items: [] }), { session: true })

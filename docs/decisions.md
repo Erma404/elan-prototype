@@ -185,3 +185,9 @@ Format : contexte, options, choix, raison.
 - Récapitulatif : alerte « Une pièce reste à corriger » (pièce, motif, conséquence : le chargé d'affaires la redemandera, instruction possiblement plus longue), bouton « Envoyer quand même », compteur « 6 sur 9, 1 à corriger ». Page Pièces : consigne et message d'aide alignés. Principe : l'IA alerte, l'humain décide.
 - Scénario « Une pièce à corriger » ouvre la pièce Bilans. « Commencer » (accueil) rétablit le persona Fabienne via `?depuis-accueil`. Journal Nicolas : les questions réelles posées à l'assistant apparaissent dès qu'elles existent. Logo de confirmation aligné sur la colonne de texte (mesuré, écart 0 px).
 - « Recommencer » (écran Bonjour) efface les réponses d'éligibilité et revient à la question 1 (`/eligibilite?recommencer`). Les motifs de correction sont mis en minuscule après les deux-points dans le récapitulatif et le message de relance.
+
+## D32 · Retirer l'échafaudage de démo de l'interface (2026-11-06)
+- Retour reçu : le parcours paraissait trop « PM ». Par défaut, l'interface ne montre plus ce qui sert à présenter : bandeau « données fictives », bouton Démo, bouton Réinitialiser. Le panneau reste accessible par Maj + D, ou en ajoutant `?demo` à l'adresse (utile sur mobile), ce qui affiche aussi le bouton Démo.
+- Textes retirés de l'écran : « exemples fictifs de démonstration » (résultat, récapitulatif, confirmation), « temps de relance estimé » chez Nicolas (indicateur gardé dans l'onglet Mesure), et les petits titres redondants au-dessus des titres principaux (Bienvenue, Avant l'envoi, Demande envoyée, Votre résultat).
+- Le bouton de changement de profil reste visible : il sert au parcours.
+- Clés de stockage de l'interface passées en `:v2` pour que le nouveau défaut s'applique aussi aux navigateurs déjà utilisés.
