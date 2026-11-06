@@ -269,6 +269,9 @@
   }
   .logo-e { clip-path: inset(0 100% 0 0); animation: logo-reveal 480ms var(--ease-out) forwards; }
   .logo-a { opacity: 0; transform: translate(-10px, 10px); animation: logo-settle 320ms 480ms var(--ease-out) forwards; }
+  .rise { animation: rise-in 420ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms); }
+  .pop-check { animation: pop-check 480ms var(--ease-out) both; }
+  .trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 420ms 240ms var(--ease-out) forwards; }
   .anim-fade { animation: fade-in var(--duration-base) var(--ease-out); }
   .anim-pop { animation: pop-in var(--duration-slow) var(--ease-out); }
   .anim-drawer { animation: drawer-in var(--duration-slow) var(--ease-out); }
@@ -291,6 +294,9 @@
 }
 @keyframes logo-reveal { to { clip-path: inset(0 0 0 0); } }
 @keyframes logo-settle { to { opacity: 1; transform: none; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pop-check { 0% { transform: scale(0.6); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: none; } }
+@keyframes trace { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 /* Le centrage est assuré par la propriété `translate` (Tailwind) : l'animation ne touche que `transform`, sans jamais remettre -50 %. */
 @keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }

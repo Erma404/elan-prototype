@@ -191,3 +191,8 @@ Format : contexte, options, choix, raison.
 - Textes retirés de l'écran : « exemples fictifs de démonstration » (résultat, récapitulatif, confirmation), « temps de relance estimé » chez Nicolas (indicateur gardé dans l'onglet Mesure), et les petits titres redondants au-dessus des titres principaux (Bienvenue, Avant l'envoi, Demande envoyée, Votre résultat).
 - Le bouton de changement de profil reste visible : il sert au parcours.
 - Clés de stockage de l'interface passées en `:v2` pour que le nouveau défaut s'applique aussi aux navigateurs déjà utilisés.
+
+## D33 · Résultat d'éligibilité et confirmation : points focaux (2026-11-06)
+- Résultat : le financement le plus adapté devient une grande carte (pastille de validation qui se trace, nom en grand, montant et délai en gros chiffres, critères en pastilles qui apparaissent en cascade, un seul bouton principal). Les autres financements sont des lignes compactes. Le montant est étiqueté « indicatif ». L'explication de l'assistant (généré par IA, avec sa source) reste, en second plan ; sur mobile la carte et le bouton passent avant elle.
+- Confirmation : pastille de validation animée, quatre chiffres clés en grille à la place d'un tableau, tracé du suivi inchangé. Les actions « Télécharger », « Modifier mes pièces » et « Suivre ma demande » sont conservées (droit à l'erreur).
+- Mouvement : trois animations (`rise-in`, `pop-check`, `trace`), toutes neutralisées par `prefers-reduced-motion`.
