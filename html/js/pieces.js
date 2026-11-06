@@ -77,10 +77,10 @@ const PIECES = [
   {
     id: "devis",
     groupe: "projet",
-    nom: "Devis du four",
+    nom: "Devis ou facture proforma",
     obligatoire: true,
     pourquoi: "Il fixe le prix exact de l\u2019\xE9quipement que nous finan\xE7ons.",
-    ouTrouver: ["Aupr\xE8s du fournisseur du four, avec son nom, sa date et le prix hors taxes.", "Deux devis valent mieux qu\u2019un si vous h\xE9sitez entre deux mod\xE8les."],
+    ouTrouver: ["Aupr\xE8s de votre fournisseur, avec son nom, sa date et le prix hors taxes.", "Deux devis valent mieux qu\u2019un si vous h\xE9sitez entre deux offres."],
     exemple: { titre: "Devis n\xB0 2026-0418", lignes: ["Four, mod\xE8le indiqu\xE9", "Prix HT : XX XXX \u20AC", "TVA : X XXX \u20AC", "Date et dur\xE9e de validit\xE9"] },
     suggestions: [{ id: "devis-ht", question: "Prix HT ou TTC ?" }]
   },
@@ -91,7 +91,7 @@ const PIECES = [
     obligatoire: false,
     pourquoi: "Il montre d\u2019o\xF9 vient chaque euro du projet. Recommand\xE9, il acc\xE9l\xE8re l\u2019instruction.",
     ouTrouver: ["Votre expert-comptable peut le pr\xE9parer \xE0 partir du devis.", "Un tableau simple suffit : besoins d\u2019un c\xF4t\xE9, ressources de l\u2019autre."],
-    exemple: { titre: "Plan de financement", lignes: ["Besoins : four, installation", "Ressources : apport, pr\xEAt", "Total : XX XXX \u20AC"] },
+    exemple: { titre: "Plan de financement", lignes: ["Besoins : \xE9quipement, installation", "Ressources : apport, pr\xEAt", "Total : XX XXX \u20AC"] },
     suggestions: [{ id: "plan-modele", question: "Avez-vous un mod\xE8le ?" }]
   }
 ];

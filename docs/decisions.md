@@ -213,3 +213,8 @@ Format : contexte, options, choix, raison.
 - Bug corrigé : en fenêtre réduite, la liste passait sous « Inviter mon experte-comptable ». Test de non-chevauchement ajouté (1024×600, 1100×640, 1280×500).
 - Résultat d'éligibilité : pictogrammes ajoutés (montant, délai, assistant, pastilles de validation, actions avec icônes).
 - « Source : Référentiel Élan, v1 » retiré de l'écran de résultat sur demande. Le garde-fou « l'assistant cite sa source » reste porté par les réponses de l'assistant sur l'écran Pièces ; à reconfirmer si la mention doit revenir.
+
+## D37 · « Achat d'un four » n'était pas dans le formulaire (2026-11-06)
+- Le titre de l'écran Pièces, le récapitulatif et le récapitulatif téléchargé affichaient « achat d'un four » en dur (valeur par défaut venue de l'histoire de Fabienne dans le PRD), quelle que soit la réponse au formulaire. Le formulaire demande seulement « Acheter un équipement ».
+- Corrigé : l'intitulé est dérivé de la réponse « projet » (Achat d'un équipement, Recrutement, Projet d'innovation, Développement à l'export, Reprise d'entreprise). La pièce « Devis du four » devient « Devis ou facture proforma », et les textes d'aide parlent de « fournisseur » et d'« équipement ».
+- Reste : la liste des 9 pièces est la même pour tous les financements (la liste adaptée au financement, E2.1, n'est pas encore faite).

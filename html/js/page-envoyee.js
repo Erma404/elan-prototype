@@ -2,7 +2,7 @@
 import { $, esc, btn } from './core.js'
 import { icon } from './icons.js'
 import { monterCoque, logo } from './shell.js'
-import { demande, pieces, eur } from './state.js'
+import { demande, pieces, eur, objetProjet } from './state.js'
 import { PIECES, compter } from './pieces.js'
 import { financements } from './engine.js'
 import { chronologie } from './composants.js'
@@ -19,7 +19,7 @@ main.innerHTML = `<div class="mx-auto grid h-full min-h-0 max-w-5xl content-cent
   <div id="suivi" class="self-center rounded-card border border-border bg-surface p-6 shadow-md"><h2 class="eyebrow">Suivi de votre demande</h2><div class="mt-5">${chronologie([{ titre: 'Réception', detail: 'Votre demande est bien arrivée.', time: date.toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }), etat: 'done' }, { titre: 'Instruction par un chargé d’affaires', detail: 'Il vérifie vos pièces et vos critères.', etat: 'current' }, { titre: 'Réponse', detail: 'Délai estimé : sous 10 jours ouvrés', etat: 'todo' }])}</div><a href="/pro/dossiers/argile" class="${btn('ghost', 'sm', 'mt-3')}">${icon('external-link')}Voir côté chargé d’affaires (démo)</a></div></div>`
 $('#suivi-lien').onclick = () => $('#suivi').scrollIntoView({ behavior: 'smooth', block: 'center' })
 $('#telecharger').onclick = () => {
-  const l = ['Récapitulatif de votre demande', `Numéro : ${st.numero ?? '—'}`, `Financement : ${f.nom}`, `Objet : ${st.objet}`, `Montant souhaité : ${a.montant !== undefined ? eur(a.montant) : 'à préciser'}`, '', 'Pièces :', ...PIECES.map((p) => `- ${p.nom} : ${st.etat[p.id].statut}`), '', 'Prototype, données fictives.']
+  const l = ['Récapitulatif de votre demande', `Numéro : ${st.numero ?? '—'}`, `Financement : ${f.nom}`, `Objet : ${objetProjet(a)}`, `Montant souhaité : ${a.montant !== undefined ? eur(a.montant) : 'à préciser'}`, '', 'Pièces :', ...PIECES.map((p) => `- ${p.nom} : ${st.etat[p.id].statut}`), '', 'Prototype, données fictives.']
   const lien = document.createElement('a'); lien.href = URL.createObjectURL(new Blob([l.join('\n')], { type: 'text/plain;charset=utf-8' })); lien.download = `recapitulatif-${st.numero ?? 'demande'}.txt`; lien.click(); URL.revokeObjectURL(lien.href)
 }
 // Aligne le bord gauche du dessin du logo sur la colonne de texte (le dessin a une marge interne dans sa boîte SVG).

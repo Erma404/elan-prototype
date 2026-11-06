@@ -6,6 +6,8 @@ import { televerser, verifierDocument, ErreurReseau, envoyerDemande } from './ap
 // ---------- Réponses d'éligibilité (Fabienne : uniquement les faits du brief, aucun montant) ----------
 export const FABIENNE = { projet: 'equipement', effectif: 3, anciennete: 4, secteur: 'artisanat' }
 export const demande = creerStore('elan:demande:html', () => ({ answers: { ...FABIENNE }, step: 0, financementId: null }))
+/** Intitulé du projet, dérivé de la réponse au formulaire (jamais inventé). */
+export const objetProjet = (a) => ({ equipement: 'Achat d’un équipement', recrutement: 'Recrutement', innovation: 'Projet d’innovation', export: 'Développement à l’export', reprise: 'Reprise d’entreprise' }[a?.projet] ?? 'Projet à préciser')
 export const setReponse = (k, v) => demande.set((s) => ({ answers: { ...s.answers, [k]: v } }))
 
 // ---------- Interface et démonstration ----------
@@ -21,7 +23,7 @@ export const ajouterRelance = (type, texte, dossier = 'argile') => relances.set(
 
 // ---------- Pièces ----------
 const hhmm = () => new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-const initialPieces = () => ({ etat: structuredClone(ETAT_INITIAL), savedAt: hhmm(), invitation: null, consentement: false, numero: null, envoyeLe: null, hors_ligne: false, session_expiree: false, erreur: null, objet: 'Achat d’un four' })
+const initialPieces = () => ({ etat: structuredClone(ETAT_INITIAL), savedAt: hhmm(), invitation: null, consentement: false, numero: null, envoyeLe: null, hors_ligne: false, session_expiree: false, erreur: null, })
 export const pieces = creerStore('elan:pieces:html', initialPieces)
 
 export const patch = (id, p) => pieces.set((s) => ({ etat: { ...s.etat, [id]: { ...s.etat[id], ...p } }, savedAt: s.hors_ligne ? s.savedAt : hhmm() }))

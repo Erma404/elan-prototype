@@ -3,7 +3,7 @@ import { $, $$, esc, btn, modale, tiroir, toast, banniere, badge, badgeStatut, a
 import { icon } from './icons.js'
 import { monterCoque } from './shell.js'
 import { ouvrirDepotGroupe } from './depot-groupe.js'
-import { demande, pieces, patch, deposer, annulerDepot, inviter, revoquer, suivre, relances, ajouterRelance, eur } from './state.js'
+import { demande, pieces, patch, deposer, annulerDepot, inviter, revoquer, suivre, relances, ajouterRelance, eur, objetProjet } from './state.js'
 import { PIECES, GROUPES, complete, compter } from './pieces.js'
 import { financements } from './engine.js'
 import { documentExemple, ligneFichier, zoneDepot, brancherDepot } from './composants.js'
@@ -74,7 +74,7 @@ function entete() {
   const raison = bloque ? `Il manque ${c.manquantes.length} pièce${c.manquantes.length > 1 ? 's' : ''} obligatoire${c.manquantes.length > 1 ? 's' : ''} : ${c.manquantes.map((p) => p.nom).join(', ')}.` : ''
   const consigne = bloque ? `Déposez les pièces obligatoires : il en reste ${c.manquantes.length}. Quand elles sont prêtes, l’envoi se débloque.` : corr ? 'Une pièce est à corriger. Vous pouvez la remplacer, ou envoyer quand même.' : 'Toutes les pièces obligatoires sont prêtes. Vous pouvez envoyer votre demande.'
   const envoyer = env ? `<a href="/demande/envoyee" class="${btn('primary', 'md', '!rounded-full')}">Voir le suivi${icon('arrow-right', 'size-5')}</a>` : `<a href="/demande/recapitulatif" ${bloque ? `aria-disabled="true" title="${esc(raison)}"` : ''} class="${btn(c.faites === 0 ? 'secondary' : 'primary', 'md', '!rounded-full')}">${corr && !bloque ? 'Envoyer quand même' : 'Envoyer ma demande'}${icon('arrow-right', 'size-5')}</a>`
-  return `<header class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3"><div class="min-w-0"><h1 class="text-[clamp(1.5rem,2.4vw,2.125rem)] font-bold leading-tight tracking-tighter">${esc(f.nom)}<span class="font-normal text-muted">, ${esc(st.objet.toLowerCase())}${a.montant !== undefined ? `, <span class="tabular">${eur(a.montant)}</span>` : ''}</span></h1><p class="mt-1 text-[0.9375rem] text-muted" aria-live="polite">${consigne}</p></div>
+  return `<header class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3"><div class="min-w-0"><h1 class="text-[clamp(1.5rem,2.4vw,2.125rem)] font-bold leading-tight tracking-tighter">${esc(f.nom)}<span class="font-normal text-muted">, ${esc(objetProjet(a).toLowerCase())}${a.montant !== undefined ? `, <span class="tabular">${eur(a.montant)}</span>` : ''}</span></h1><p class="mt-1 text-[0.9375rem] text-muted" aria-live="polite">${consigne}</p></div>
     <div class="flex flex-wrap items-center gap-2"><button type="button" data-groupe class="${btn(c.faites === 0 ? 'primary' : 'secondary', 'md', '!rounded-full')}">${icon('upload')}Déposer plusieurs documents</button>${envoyer}</div></header>`
 }
 function bannieres() {
