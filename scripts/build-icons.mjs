@@ -1,7 +1,7 @@
 // Extrait les icônes Lucide utilisées vers html/js/icons.js (SVG en ligne, aucune dépendance au runtime).
 import { writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-const noms = 'banknote sparkles plus triangle-alert arrow-left arrow-right camera check circle-check chevron-down chevron-left chevron-right circle-dashed circle-question-mark clock download external-link eye file-check file-text flame flask-conical info life-buoy loader-circle message-circle message-circle-question-mark message-square-quote circle-minus moon pause pencil phone play rotate-ccw shield-check sun trash-2 truck undo-2 upload user-plus user-round wifi-off x circle-x'.split(' ');
+const noms = 'user users users-round building-2 factory store hammer laptop sprout calendar calendar-check award ban list-checks map-pin search folder-open banknote sparkles plus triangle-alert arrow-left arrow-right camera check circle-check chevron-down chevron-left chevron-right circle-dashed circle-question-mark clock download external-link eye file-check file-text flame flask-conical info life-buoy loader-circle message-circle message-circle-question-mark message-square-quote circle-minus moon pause pencil phone play rotate-ccw shield-check sun trash-2 truck undo-2 upload user-plus user-round wifi-off x circle-x'.split(' ');
 const alias = { 'circle-question-mark': ['circle-help'], 'message-circle-question-mark': ['message-circle-question'], 'file-check': ['file-check-2', 'file-check-corner'], 'triangle-alert': ['alert-triangle'], 'loader-circle': ['loader-2'] };
 const out = {}; const manque = [];
 for (const n of noms) {

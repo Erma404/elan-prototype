@@ -181,4 +181,10 @@ for (const [w, h] of [[1024, 600], [1100, 640], [1280, 500]]) {
   ok(`pièces ${w}×${h} : liste et invitation sans chevauchement, pas de défilement de page`, !r.chevauche && !r.page);
 }
 
+
+// 17. « Recommencer » remet aussi les pièces à zéro (l'écran Pièces se met à jour)
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await p.locator('#detail input[data-fichier]').setInputFiles(f('Kbis.pdf')); await p.waitForFunction(() => document.querySelector('#liste')?.innerText.includes('Vérifiée'), null, { timeout: 8000 });
+await p.goto(B + '/bonjour', { waitUntil: 'networkidle' }); await p.getByRole('link', { name: 'Recommencer' }).click(); await p.waitForURL('**/eligibilite'); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' });
+ok('« Recommencer » : l’écran Pièces repart à 0 sur 9', /0 pièce sur 9/.test(await p.locator('#lateral').innerText()) && !/Vérifiée|Reçue/.test(await p.locator('#liste').innerText()));
+
 console.log(errs.length ? 'ERREURS CONSOLE :\n' + [...new Set(errs)].join('\n') : 'console propre'); console.log(ko ? `${ko} échec(s)` : 'toutes les vérifications passent'); await b.close(); process.exit(ko ? 1 : 0);

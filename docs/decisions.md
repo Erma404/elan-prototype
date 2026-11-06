@@ -218,3 +218,9 @@ Format : contexte, options, choix, raison.
 - Le titre de l'écran Pièces, le récapitulatif et le récapitulatif téléchargé affichaient « achat d'un four » en dur (valeur par défaut venue de l'histoire de Fabienne dans le PRD), quelle que soit la réponse au formulaire. Le formulaire demande seulement « Acheter un équipement ».
 - Corrigé : l'intitulé est dérivé de la réponse « projet » (Achat d'un équipement, Recrutement, Projet d'innovation, Développement à l'export, Reprise d'entreprise). La pièce « Devis du four » devient « Devis ou facture proforma », et les textes d'aide parlent de « fournisseur » et d'« équipement ».
 - Reste : la liste des 9 pièces est la même pour tous les financements (la liste adaptée au financement, E2.1, n'est pas encore faite).
+
+## D38 · Retour au-dessus, pictogrammes, « Recommencer » complet (2026-11-06)
+- « Retour » est placé au-dessus du contenu, en haut à gauche, avec une flèche : questions du formulaire (le premier ramène à l'écran Bonjour), résultat (« Modifier mes réponses »), écran Pièces (« Mon résultat »), récapitulatif (« Retour aux pièces »). Il n'est plus à côté du bouton principal.
+- Pictogrammes ajoutés : une icône par réponse (équipe, ancienneté, secteur), titres des cartes du récapitulatif, « Pourquoi / Où la trouver / Voir un exemple », « Je ne l'ai pas encore », « Non applicable », actions de la confirmation. Les boutons flottants sont rattachés : « Suivre ma demande » n'apparaît que sur petit écran.
+- Question de formulaire : le bouton principal reste dans la fenêtre à 1280×720, avec défilement interne en dessous.
+- « Recommencer » (écran Bonjour) remet toute la demande à zéro : réponses, pièces déposées, consentement, envoi, invitation et historique, puis revient à la question 1.

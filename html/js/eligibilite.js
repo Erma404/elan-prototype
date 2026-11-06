@@ -2,14 +2,14 @@
 import { $, $$, esc, btn, modale, toast, pictogramme } from './core.js'
 import { icon } from './icons.js'
 import { monterCoque } from './shell.js'
-import { demande, setReponse, suivre, eur } from './state.js'
+import { demande, setReponse, suivre, eur, reinitialiser } from './state.js'
 import { QUESTIONS } from './questions.js'
 import { retenus, ecartes, leCritereManquant, explicationTete, alternatives, REFERENTIEL } from './engine.js'
 
 
 const TOTAL = QUESTIONS.length
-// « Recommencer » depuis l’écran Bonjour : réponses effacées, retour à la question 1.
-if (new URLSearchParams(location.search).has('recommencer')) { demande.set({ answers: {}, step: 0, financementId: null }); history.replaceState(null, '', '/eligibilite') }
+// « Recommencer » depuis l’écran Bonjour : toute la demande repart de zéro (réponses, pièces, envoi), retour à la question 1.
+if (new URLSearchParams(location.search).has('recommencer')) { reinitialiser(); demande.set({ answers: {}, step: 0, financementId: null }); try { sessionStorage.removeItem('elan:piece') } catch { /* */ } history.replaceState(null, '', '/eligibilite') }
 const main = monterCoque({ step: 0, titre: 'Éligibilité' })
 const S = () => demande.get()
 const complet = () => QUESTIONS.every((q) => S().answers[q.key] !== undefined)
@@ -30,24 +30,25 @@ const majPanneau = () => { const p = $('#panneau'); if (p) p.innerHTML = panneau
 demande.sub(() => { majPanneau() })
 
 // ---------- Une question par écran ----------
-const carte = (o, i, sel) => `<button type="button" role="radio" aria-checked="${sel}" data-choix="${i}" class="tr flex min-h-14 w-full cursor-pointer items-center gap-4 rounded-full border px-6 py-2 text-left active:scale-[0.99] ${sel ? 'border-text bg-text text-bg' : 'border-border-strong bg-surface hover:border-text'}">${o.icon ? pictogramme(o.icon, 'size-5 shrink-0') : ''}<span class="flex-1"><span class="block font-semibold tracking-tight">${esc(o.label)}</span>${o.description ? `<span class="block text-sm leading-snug ${sel ? 'text-bg/70' : 'text-muted'}">${esc(o.description)}</span>` : ''}</span><span aria-hidden="true" class="grid size-6 shrink-0 place-items-center rounded-full border ${sel ? 'border-bg' : 'border-border-strong'}">${sel ? icon('check', 'size-4') : ''}</span></button>`
+const carte = (o, i, sel) => `<button type="button" role="radio" aria-checked="${sel}" data-choix="${i}" class="tr flex min-h-12 w-full cursor-pointer items-center gap-4 rounded-full border px-6 py-1.5 text-left active:scale-[0.99] ${sel ? 'border-text bg-text text-bg' : 'border-border-strong bg-surface hover:border-text'}">${o.icon ? (o.icon.startsWith('l:') ? icon(o.icon.slice(2), 'size-5 shrink-0') : pictogramme(o.icon, 'size-5 shrink-0')) : ''}<span class="flex-1"><span class="block font-semibold tracking-tight">${esc(o.label)}</span>${o.description ? `<span class="block text-sm leading-snug ${sel ? 'text-bg/70' : 'text-muted'}">${esc(o.description)}</span>` : ''}</span><span aria-hidden="true" class="grid size-6 shrink-0 place-items-center rounded-full border ${sel ? 'border-bg' : 'border-border-strong'}">${sel ? icon('check', 'size-4') : ''}</span></button>`
 
 function question() {
   const { step, answers } = S(), q = QUESTIONS[Math.min(step, TOTAL - 1)], m = answers.montant
   const points = QUESTIONS.map((x, i) => `<span class="h-1 w-8 rounded-full tr ${i <= step ? 'bg-text' : 'bg-border'}"></span>`).join('')
   const ok = answers[q.key] !== undefined
   let corps
-  if (q.kind === 'choice') corps = `<div role="radiogroup" aria-labelledby="question" class="mx-auto mt-7 flex w-full max-w-lg flex-col gap-2">${q.options.map((o, i) => carte(o, i, answers[q.key] === o.value)).join('')}</div>`
+  if (q.kind === 'choice') corps = `<div role="radiogroup" aria-labelledby="question" class="mx-auto mt-5 flex w-full max-w-lg flex-col gap-1.5">${q.options.map((o, i) => carte(o, i, answers[q.key] === o.value)).join('')}</div>`
   else corps = `<div class="mx-auto mt-7 w-full max-w-2xl"><p class="tabular text-center text-[clamp(2.75rem,6vw,4.5rem)] font-light leading-none tracking-tighter"><output id="montant-sortie" aria-live="polite">${m === undefined ? '<span class="text-subtle">— €</span>' : eur(m)}</output></p>
     <div class="mt-6"><label for="jauge" class="sr-only">Montant recherché, de ${eur(q.min)} à ${eur(q.max)}</label><input id="jauge" type="range" min="${q.min}" max="${q.max}" step="${q.step}" value="${m ?? q.min}" class="jauge-plage ${m === undefined ? 'neutre' : ''}" style="--p:${(((m ?? q.min) - q.min) / (q.max - q.min)) * 100}%" aria-valuetext="${m === undefined ? 'Aucun montant choisi' : eur(m)}" /><div class="tabular mt-1 flex justify-between text-sm text-muted" aria-hidden="true"><span>${eur(q.min)}</span><span>${eur(q.max)}</span></div></div>
     <div class="mt-4 flex flex-wrap items-center justify-center gap-2" role="group" aria-label="Montants courants">${q.presets.map((v) => `<button type="button" data-preset="${v}" aria-pressed="${m === v}" class="tr inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 text-sm font-medium hover:border-text aria-pressed:border-text aria-pressed:bg-text aria-pressed:text-bg border-border-strong bg-surface">${eur(v)}</button>`).join('')}</div>
     <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1"><label for="saisie" class="text-sm font-medium">Ou saisissez le montant exact</label><span class="relative"><input id="saisie" inputmode="numeric" autocomplete="off" aria-describedby="erreur-montant" value="${m ?? ''}" class="tr tabular h-11 w-40 rounded-full border border-border-strong bg-surface px-4 pr-9 text-base hover:border-text"><span aria-hidden="true" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted">€</span></span></div>
     <p id="erreur-montant" role="alert" class="mt-2 min-h-5 text-sm text-danger" hidden></p></div>`
-  return `<section aria-labelledby="question" class="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col justify-center py-2 text-center">
-    <div class="flex items-center justify-center gap-3" role="progressbar" aria-label="Progression du test" aria-valuemin="1" aria-valuemax="${TOTAL}" aria-valuenow="${step + 1}"><span class="tabular text-sm text-muted">${step + 1} sur ${TOTAL}</span><span class="flex gap-1.5">${points}</span></div>
-    <h1 id="question" tabindex="-1" class="mt-5 text-[clamp(1.875rem,3.6vw,3rem)] font-light leading-[1.06] tracking-[-0.03em] outline-none">${esc(q.titre)}</h1><p class="mt-2 text-lg text-muted">${esc(q.aide)}</p>${corps}
-    <div class="mt-7 flex flex-wrap items-center justify-center gap-3">${step > 0 ? `<button type="button" data-retour class="${btn('ghost', 'lg', '!rounded-full')}">${icon('arrow-left')}Retour</button>` : ''}<button type="button" id="continuer" data-continuer data-guide class="${btn('primary', 'lg', '!rounded-full !px-8')}" ${ok ? '' : 'aria-disabled="true" title="Choisissez une réponse pour continuer."'}>${step === TOTAL - 1 ? 'Voir mes financements' : 'Continuer'}${icon('arrow-right', 'size-5')}</button></div>
-    <p id="etat" class="mt-3 min-h-5 text-sm text-muted" aria-live="polite">${ok ? '' : q.kind === 'slider' ? 'Choisissez ou saisissez un montant pour continuer.' : 'Choisissez une réponse pour continuer.'}</p></section>`
+  return `<section aria-labelledby="question" class="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col overflow-y-auto py-2 text-center">
+    <div class="text-left">${step > 0 ? `<button type="button" data-retour class="${btn('ghost', 'sm', '-ml-3')}">${icon('arrow-left')}Retour</button>` : `<a href="/bonjour" class="${btn('ghost', 'sm', '-ml-3')}">${icon('arrow-left')}Retour</a>`}</div>
+    <div class="my-auto"><div class="flex items-center justify-center gap-3" role="progressbar" aria-label="Progression du test" aria-valuemin="1" aria-valuemax="${TOTAL}" aria-valuenow="${step + 1}"><span class="tabular text-sm text-muted">${step + 1} sur ${TOTAL}</span><span class="flex gap-1.5">${points}</span></div>
+    <h1 id="question" tabindex="-1" class="mt-3 text-[clamp(1.75rem,3.2vw,2.75rem)] font-light leading-[1.06] tracking-[-0.03em] outline-none">${esc(q.titre)}</h1><p class="mt-2 text-lg text-muted">${esc(q.aide)}</p>${corps}
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-3"><button type="button" id="continuer" data-continuer data-guide class="${btn('primary', 'lg', '!rounded-full !px-8')}" ${ok ? '' : 'aria-disabled="true" title="Choisissez une réponse pour continuer."'}>${step === TOTAL - 1 ? 'Voir mes financements' : 'Continuer'}${icon('arrow-right', 'size-5')}</button></div>
+    <p id="etat" class="mt-3 min-h-5 text-sm text-muted" aria-live="polite">${ok ? '' : q.kind === 'slider' ? 'Choisissez ou saisissez un montant pour continuer.' : 'Choisissez une réponse pour continuer.'}</p></div></section>`
 }
 
 // ---------- Résultat ----------
@@ -64,11 +65,11 @@ function resultat() {
   const vide = `<div class="rounded-card border border-border bg-surface p-5 sm:p-6"><h2 class="text-lg font-semibold tracking-tight">Ce qu’il faudrait pour devenir éligible</h2>${proche ? `<p class="mt-1 text-sm text-muted">Le plus proche de votre situation : <span class="font-medium text-text">${esc(proche.financement.nom)}</span>.</p><ul class="mt-3 flex flex-col gap-2">${proche.manque.map((m) => `<li class="rounded-md bg-bg-soft px-4 py-3"><p class="text-sm font-medium">${esc(m.label)}</p><p class="text-sm text-muted">${esc(m.raison)}</p></li>`).join('')}</ul>` : ''}<div class="mt-4"><button type="button" data-modifier class="${btn('secondary', 'sm')}">Modifier mes réponses</button></div></div>
     <div class="rounded-card border border-border bg-surface p-5 sm:p-6"><h2 class="text-lg font-semibold tracking-tight">D’autres pistes</h2><ul class="mt-3 flex flex-col gap-3">${alternatives.map((x) => `<li><p class="text-sm font-medium">${esc(x.nom)}</p><p class="text-sm text-muted">${esc(x.texte)}</p></li>`).join('')}</ul><div class="mt-4"><button type="button" data-conseiller class="${btn('primary', 'sm')}">${icon('phone')}Parler à un conseiller</button></div></div>`
   return `<div class="grid h-full min-h-0 gap-8 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-    <section class="flex min-h-0 flex-col gap-5 max-lg:contents lg:overflow-y-auto" aria-labelledby="resultat">
+    <section class="flex min-h-0 flex-col gap-5 max-lg:contents lg:overflow-y-auto" aria-labelledby="resultat"><div class="max-lg:order-0 -mb-2"><button type="button" data-modifier class="${btn('ghost', 'sm', '-ml-3')}">${icon('arrow-left')}Modifier mes réponses</button></div>
       <h1 id="resultat" tabindex="-1" class="max-lg:order-1 text-[clamp(1.875rem,3.2vw,2.875rem)] font-bold leading-[1.06] tracking-tighter outline-none">${liste.length > 0 ? `${liste.length === 1 ? '1 financement correspond' : `${liste.length} financements correspondent`} à votre projet.` : 'Aucun financement ne correspond pour l’instant.'}</h1>
       <div class="bg-ai rounded-md p-4 max-lg:order-3 text-[var(--color-ai-text)]"><p class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-ai-accent)]"><span aria-hidden="true" class="text-[var(--color-ai-accent)]">${icon('sparkles', 'size-4')}</span>Assistant Élan, généré par IA</p><p class="text-base leading-relaxed">${esc(explicationTete(a))}</p></div>
       ${out.length ? `<details class="accordeon max-lg:order-3 rounded-card border border-border bg-surface"><summary class="tr flex min-h-14 items-center justify-between gap-3 rounded-card px-5 py-3 hover:bg-bg-soft"><span class="font-semibold">Pourquoi pas les autres ? <span class="font-normal text-muted">(${out.length})</span></span><span class="chevron tr">${icon('chevron-down', 'size-5 text-muted')}</span></summary><ul class="flex flex-col gap-3 px-5 pb-5">${out.map((e) => `<li><p class="font-medium">${esc(e.financement.nom)}</p><p class="text-sm text-muted">${esc(e.pourquoiPas)}</p></li>`).join('')}</ul></details>` : ''}
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm max-lg:order-3"><button type="button" data-modifier class="${btn('secondary', 'sm', '!rounded-full')}">${icon('pencil')}Modifier mes réponses</button><button type="button" data-conseiller class="${btn('secondary', 'sm', '!rounded-full')}">${icon('phone')}Parler à un conseiller</button></div>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm max-lg:order-3"><button type="button" data-conseiller class="${btn('secondary', 'sm', '!rounded-full')}">${icon('phone')}Parler à un conseiller</button></div>
     </section>
     <section class="flex min-h-0 flex-col gap-4 max-lg:order-2 lg:overflow-y-auto" aria-label="${liste.length ? 'Financements possibles' : 'Pistes'}">${liste.length ? `<ul class="flex flex-col gap-4">${cartes}</ul>` : vide}</section></div>`
 }
