@@ -101,8 +101,13 @@ ok('clavier : le lien d’évitement est le premier élément focalisable', awai
 const vus = new Set(); for (let i = 0; i < 25; i++) { await p.keyboard.press('Tab'); const a = await p.evaluate(() => { const e = document.activeElement; if (e === document.body || e === document.documentElement) return 'fin de page'; const r = e.getBoundingClientRect(); const o = getComputedStyle(e).outlineStyle; return (e.getAttribute('aria-label') || e.textContent || e.tagName).trim().slice(0, 28) + (r.width && o !== 'none' ? '' : ' [focus peu visible]') }); vus.add(a) }
 console.log('   éléments parcourus :', [...vus].join(' | '))
 ok(`clavier : ${vus.size} éléments atteignables sans piège, tous avec contour de focus`, vus.size > 8 && ![...vus].some((x) => x.includes('[focus peu visible]')));
-await p.locator('#continuer').focus(); await p.keyboard.press('Enter'); await p.waitForTimeout(200); ok('clavier : Entrée sur Continuer avance', (await p.locator('#question').innerText()).includes('personnes'));
-await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.keyboard.press('Enter'); await p.waitForTimeout(150); ok('clavier : Entrée valide la réponse présélectionnée (question 4 atteinte)', (await p.locator('#question').innerText()).includes('montant'));
+ok('éligibilité : « Voir mes financements » désactivé tant que tout n’est pas renseigné (raison écrite)', (await p.locator('#continuer').getAttribute('aria-disabled')) === 'true' && /montant/.test(await p.locator('#etat').innerText()));
+await p.locator('[data-key="projet"][data-val="equipement"]').focus(); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(150);
+ok('clavier : les flèches choisissent dans un groupe de réponses', (await p.locator('[data-key="projet"][aria-checked="true"]').getAttribute('data-val')) === 'recrutement');
+for (const [k, v] of [['projet', 'equipement'], ['effectif', '3'], ['anciennete', '4'], ['secteur', 'artisanat']]) await p.locator(`[data-key="${k}"][data-val="${v}"]`).click();
+await p.locator('[data-preset="50000"]').click(); await p.waitForTimeout(100);
+ok('éligibilité : un seul clic final mène au résultat (5 réponses sur une page)', (await p.locator('#continuer').getAttribute('aria-disabled')) === 'false');
+await p.locator('#continuer').click(); await p.waitForTimeout(300); ok('éligibilité : résultat affiché', /financement/.test(await p.locator('#resultat').innerText()));
 await p.keyboard.press('Escape');
 
 
@@ -131,10 +136,10 @@ ok(`confirmation : logo aligné sur le texte (écart ${al.toFixed(1)} px)`, Math
 
 
 // 12. Recommencer efface les réponses et repart à la question 1 ; minuscule après les deux-points
-p = await page(); await p.goto(B + '/eligibilite', { waitUntil: 'networkidle' }); await p.locator('#continuer').click(); await p.waitForTimeout(200); await p.locator('#continuer').click(); await p.waitForTimeout(200);
+p = await page(); await p.goto(B + '/eligibilite', { waitUntil: 'networkidle' }); await p.locator('[data-preset="50000"]').click(); await p.waitForTimeout(200);
 await p.goto(B + '/bonjour', { waitUntil: 'networkidle' }); await p.getByRole('link', { name: 'Recommencer' }).click(); await p.waitForURL('**/eligibilite'); await p.waitForLoadState('networkidle');
 const rep = await p.evaluate(() => JSON.parse(localStorage.getItem('elan:demande:html') ?? '{}'));
-ok('« Recommencer » : réponses effacées, retour à la question 1', (await p.locator('#question').innerText()).length > 0 && (rep.step ?? 0) === 0 && Object.keys(rep.answers ?? {}).length === 0 && p.url().endsWith('/eligibilite'));
+ok('« Recommencer » : réponses effacées, retour à la question 1', (await p.locator('[data-key][aria-checked="true"]').count()) === 0 && (rep.step ?? 0) === 0 && Object.keys(rep.answers ?? {}).length === 0 && p.url().endsWith('/eligibilite'));
 p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-scenario="corriger"]').click(); await p.waitForURL('**/demande/pieces'); await p.goto(B + '/demande/recapitulatif', { waitUntil: 'networkidle' });
 ok('récapitulatif : minuscule après les deux-points (« : la page 2 du bilan… »)', (await p.locator('main').innerText()).includes(': la page 2 du bilan'));
 p = await page(); await p.goto(B + '/pro/dossiers/boulangerie', { waitUntil: 'networkidle' }); await p.locator('[data-msg="relance"]').click(); await p.waitForTimeout(300);
@@ -148,5 +153,21 @@ await p.locator('#consent').check(); await p.getByRole('button', { name: /Envoye
 await p.goto(B + '/pro/dossiers/argile', { waitUntil: 'networkidle' }); await p.locator('#t-journal').click();
 const jr = await p.locator('#v-journal').innerText();
 ok('journal Nicolas : « Échange avec l’assistant » après un vrai usage par Fabienne (' + qt.slice(0, 40) + ')', jr.includes('Échange avec l’assistant') && jr.includes(qt.replace(/[«»]/g, '').trim().slice(0, 25)));
+
+
+// 14. Dépôt groupé : l'assistant propose, l'utilisateur valide
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await p.locator('[data-groupe]').click(); await p.waitForSelector('#multi', { state: 'attached' });
+await p.locator('#multi').setInputFiles([f('Kbis-atelier.pdf'), f('CNI-fabienne.jpg', 'image/jpeg'), f('RIB.pdf'), f('scan0042.pdf'), f('Kbis-copie.pdf'), f('gros.pdf', 'application/pdf', 11 * 1048576)]);
+await p.waitForTimeout(300);
+ok('dépôt groupé : classement proposé (Kbis, identité, RIB reconnus)', (await p.locator('#s-0').inputValue()) === 'kbis' && (await p.locator('#s-1').inputValue()) === 'identite' && (await p.locator('#s-2').inputValue()) === 'rib');
+ok('dépôt groupé : fichier non reconnu « à associer », doublon non écrasé, fichier trop lourd refusé avec sa taille', (await p.locator('#s-3').inputValue()) === '' && (await p.locator('#s-4').inputValue()) === '' && /Fichier trop lourd/.test(await p.locator('#groupe').innerText()));
+ok('dépôt groupé : rien n’est déposé avant validation', !/Reçue|Vérifiée|En cours/i.test(await p.locator('#liste').innerText()));
+await p.locator('#s-3').selectOption('statuts'); ok('dépôt groupé : bouton « Valider 4 documents »', (await p.locator('#valider-groupe').innerText()) === 'Valider 4 documents');
+await p.locator('#valider-groupe').click(); await p.waitForFunction(() => (document.querySelector('#liste')?.innerText.match(/Vérifiée/g) ?? []).length === 4, null, { timeout: 12000 });
+ok('dépôt groupé : 4 pièces déposées puis vérifiées en un seul passage', true);
+// IA indisponible : aucun classement proposé, association manuelle
+p = await page(); await p.goto(B + '/demande/pieces', { waitUntil: 'networkidle' }); await demo(p); await p.locator('[data-erreur="ia"]').click(); await p.keyboard.press('Escape');
+await p.locator('[data-groupe]').click(); await p.locator('#multi').setInputFiles([f('Kbis-atelier.pdf')]); await p.waitForTimeout(200);
+ok('dépôt groupé, assistant indisponible : aucun classement proposé, association à la main', (await p.locator('#s-0').inputValue()) === '' && /à associer/.test(await p.locator('#groupe').innerText()));
 
 console.log(errs.length ? 'ERREURS CONSOLE :\n' + [...new Set(errs)].join('\n') : 'console propre'); console.log(ko ? `${ko} échec(s)` : 'toutes les vérifications passent'); await b.close(); process.exit(ko ? 1 : 0);

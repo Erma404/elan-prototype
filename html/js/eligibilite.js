@@ -1,10 +1,12 @@
-// Écran 1 : pré-éligibilité. Une question à la fois, pas à pas (aucune avance automatique).
+// Écran 1 : pré-éligibilité. Les cinq réponses tiennent sur un seul écran ; un seul clic pour voir le résultat.
 import { $, $$, esc, btn, modale, toast, pictogramme } from './core.js'
 import { icon } from './icons.js'
 import { monterCoque } from './shell.js'
 import { demande, setReponse, suivre, eur } from './state.js'
 import { QUESTIONS } from './questions.js'
 import { retenus, ecartes, leCritereManquant, explicationTete, alternatives, REFERENTIEL } from './engine.js'
+
+const LABELS = { projet: 'Votre projet', effectif: 'Votre équipe', anciennete: 'Son ancienneté', secteur: 'Votre secteur', montant: 'Montant souhaité' }
 
 const TOTAL = QUESTIONS.length
 // « Recommencer » depuis l’écran Bonjour : réponses effacées, retour à la question 1.
@@ -28,34 +30,23 @@ function panneau() {
 const majPanneau = () => { const p = $('#panneau'); if (p) p.innerHTML = panneau() }
 demande.sub(() => { majPanneau() })
 
-// ---------- Question ----------
-const carte = (o, i, sel) => `<button type="button" role="radio" aria-checked="${sel}" data-choix="${i}" class="tr flex min-h-14 w-full cursor-pointer items-center gap-4 rounded-md border px-4 py-2.5 text-left active:scale-[0.99] ${sel ? 'border-accent bg-accent-soft shadow-sm outline outline-1 outline-accent' : 'border-border bg-surface hover:border-border-strong hover:bg-bg-soft'}">
-  ${o.icon ? `<span class="grid size-10 shrink-0 place-items-center rounded-sm bg-bg-soft text-text">${pictogramme(o.icon, 'size-5')}</span>` : ''}
-  <span class="flex-1"><span class="block font-semibold tracking-tight">${esc(o.label)}</span>${o.description ? `<span class="mt-0.5 block text-sm leading-snug text-muted">${esc(o.description)}</span>` : ''}</span>
-  <kbd aria-hidden="true" class="tabular hidden size-7 place-items-center rounded-sm border border-border-strong text-sm text-muted sm:grid">${i + 1}</kbd>
-  <span aria-hidden="true" class="tr grid size-6 shrink-0 place-items-center rounded-full border ${sel ? 'border-accent bg-accent text-accent-fg' : 'border-border-strong'}">${sel ? icon('check', 'size-4') : ''}</span></button>`
+// ---------- Formulaire : une seule page ----------
+const puce = (q, o, sel, premier) => `<button type="button" role="radio" aria-checked="${sel}" tabindex="${sel || premier ? 0 : -1}" data-key="${q.key}" data-val="${esc(String(o.value))}" class="tr inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[0.9375rem] font-medium active:scale-[0.98] ${sel ? 'border-text bg-text text-bg' : 'border-border-strong bg-surface hover:border-text'}">${o.icon ? pictogramme(o.icon, 'size-4') : ''}${esc(o.label)}</button>`
+const groupe = (q, answers) => `<div role="radiogroup" aria-labelledby="g-${q.key}"><p id="g-${q.key}" class="mb-2 text-sm font-medium text-muted">${LABELS[q.key]}</p><div class="flex flex-wrap gap-2">${q.options.map((o, i) => puce(q, o, answers[q.key] === o.value, answers[q.key] === undefined && i === 0)).join('')}</div></div>`
+const manque = (a) => QUESTIONS.filter((q) => a[q.key] === undefined).map((q) => LABELS[q.key].toLowerCase())
+const etat = (a) => { const m = manque(a); if (m.length) return `Il reste à renseigner : ${m.join(', ')}.`; const n = retenus(a).filter((e) => e.statut === 'possible').length; return n > 0 ? `${n} financement${n > 1 ? 's' : ''} possible${n > 1 ? 's' : ''} pour l’instant.` : 'Aucun financement ne correspond pour l’instant.' }
 
 function question() {
-  const { step, answers } = S(), q = QUESTIONS[Math.min(step, TOTAL - 1)]
-  const barre = QUESTIONS.map((x, i) => `<span class="h-1 flex-1 rounded-full tr ${i <= step ? 'bg-text' : 'bg-border'}"></span>`).join('')
-  let corps
-  if (q.kind === 'choice') {
-    corps = `<div role="radiogroup" aria-labelledby="question" class="mt-4 flex flex-col gap-2">${q.options.map((o, i) => carte(o, i, answers[q.key] === o.value)).join('')}</div>
-      <div class="mt-4 flex flex-wrap items-center gap-4"><button type="button" id="continuer" data-continuer class="${btn('primary', 'md')}" ${answers[q.key] === undefined ? 'aria-disabled="true" title="Choisissez une réponse pour continuer."' : ''}>Continuer</button><p class="hidden text-sm text-subtle sm:block">Entrée pour valider, touches 1 à ${q.options.length} pour choisir.</p></div>`
-  } else {
-    const m = answers.montant
-    corps = `<div class="mt-4"><p class="tabular text-[clamp(2.5rem,5vw,3.75rem)] font-bold leading-none tracking-tighter"><output id="montant-sortie" aria-live="polite">${m === undefined ? '<span class="text-subtle">— €</span>' : eur(m)}</output></p>
-      <div class="mt-3"><label for="jauge" class="sr-only">Montant recherché</label><input id="jauge" type="range" min="${q.min}" max="${q.max}" step="${q.step}" value="${m ?? q.min}" class="jauge-plage ${m === undefined ? 'neutre' : ''}" style="--p:${(((m ?? q.min) - q.min) / (q.max - q.min)) * 100}%" aria-valuetext="${m === undefined ? 'Aucun montant choisi' : eur(m)}" /></div>
-      <div class="mt-1 flex flex-wrap items-center gap-2" role="group" aria-label="Montants courants">${q.presets.map((v) => `<button type="button" data-preset="${v}" aria-pressed="${m === v}" class="tr inline-flex min-h-9 cursor-pointer items-center rounded-full border px-3.5 text-sm font-medium hover:bg-bg-soft aria-pressed:border-accent aria-pressed:bg-accent-soft aria-pressed:text-accent-text border-border-strong bg-surface">${eur(v)}</button>`).join('')}</div>
-      <div class="mt-3 max-w-xs"><label for="saisie" class="text-sm font-medium">Ou saisissez le montant exact</label><div class="relative mt-1.5"><input id="saisie" inputmode="numeric" autocomplete="off" placeholder="Montant en euros" value="${m ?? ''}" class="tr tabular h-11 w-full rounded-sm border border-border-strong bg-surface px-3.5 pr-9 text-base text-text placeholder:text-subtle hover:border-text"><span aria-hidden="true" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted">€</span></div></div>
-      <div class="mt-4"><button type="button" id="continuer" data-continuer class="${btn('primary', 'lg')}" ${m === undefined ? 'aria-disabled="true"' : ''}>Continuer</button><p id="raison-montant" class="mt-2 text-sm text-muted" ${m === undefined ? '' : 'hidden'}>Choisissez ou saisissez un montant pour continuer.</p></div></div>`
-  }
-  return `<div class="grid h-full min-h-0 gap-8 lg:grid-cols-[minmax(0,1fr)_26rem]">
-    <section aria-labelledby="question" class="flex min-h-0 min-w-0 max-w-2xl flex-col"><div class="flex items-center justify-between gap-4"><p class="eyebrow" aria-live="polite"><span class="tabular">${step + 1} sur ${TOTAL}</span></p>${step > 0 ? `<button type="button" data-retour class="${btn('ghost', 'sm')}">${icon('arrow-left')}Retour</button>` : ''}</div>
-      <div role="progressbar" aria-label="Progression du test" aria-valuemin="1" aria-valuemax="${TOTAL}" aria-valuenow="${step + 1}" class="mt-3 flex gap-1.5">${barre}</div>
-      <h1 id="question" tabindex="-1" class="mt-5 text-[clamp(1.5rem,2.5vw,2.25rem)] font-bold leading-[1.08] tracking-tighter outline-none">${esc(q.titre)}</h1><p class="mt-1.5 text-base text-muted">${esc(q.aide)}</p>${corps}</section>
-    <aside id="panneau" aria-label="Financements possibles" class="min-h-0 lg:h-full">${panneau()}</aside></div>`
+  const a = S().answers, qs = Object.fromEntries(QUESTIONS.map((q) => [q.key, q])), qm = qs.montant, m = a.montant
+  return `<div class="mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-center gap-6 py-2">
+    <div class="text-center"><h1 id="question" tabindex="-1" class="text-[clamp(2rem,4vw,3.25rem)] font-light leading-[1.04] tracking-[-0.03em] outline-none">Parlez-nous de votre projet.</h1><p class="mt-3 text-lg text-muted">Cinq réponses, et vous saurez si vous avez votre chance.</p></div>
+    <div class="grid gap-x-12 gap-y-5 lg:grid-cols-2"><div class="flex flex-col gap-5">${groupe(qs.projet, a)}${groupe(qs.secteur, a)}</div><div class="flex flex-col gap-5">${groupe(qs.effectif, a)}${groupe(qs.anciennete, a)}</div></div>
+    <div class="grid items-center gap-x-10 gap-y-3 rounded-card bg-bg-soft px-6 py-4 lg:grid-cols-[auto_minmax(0,1fr)]"><div><p id="g-montant" class="text-sm font-medium text-muted">${LABELS.montant}</p><p class="tabular text-[clamp(2rem,3.4vw,2.75rem)] font-bold leading-none tracking-tighter"><output id="montant-sortie" aria-live="polite">${m === undefined ? '<span class="text-subtle">— €</span>' : eur(m)}</output></p></div>
+      <div><label for="jauge" class="sr-only">Montant recherché</label><input id="jauge" type="range" min="${qm.min}" max="${qm.max}" step="${qm.step}" value="${m ?? qm.min}" class="jauge-plage ${m === undefined ? 'neutre' : ''}" style="--p:${(((m ?? qm.min) - qm.min) / (qm.max - qm.min)) * 100}%" aria-valuetext="${m === undefined ? 'Aucun montant choisi' : eur(m)}" />
+        <div class="mt-2 flex flex-wrap items-center gap-2" role="group" aria-label="Montants courants">${qm.presets.map((v) => `<button type="button" data-preset="${v}" aria-pressed="${m === v}" class="tr inline-flex min-h-9 cursor-pointer items-center rounded-full border px-3.5 text-sm font-medium hover:border-text aria-pressed:border-text aria-pressed:bg-text aria-pressed:text-bg border-border-strong bg-surface">${eur(v)}</button>`).join('')}<label for="saisie" class="sr-only">Montant exact, en euros</label><span class="relative"><input id="saisie" inputmode="numeric" autocomplete="off" placeholder="Autre montant" value="${m ?? ''}" class="tr tabular h-9 w-36 rounded-full border border-border-strong bg-surface px-3.5 pr-8 text-sm placeholder:text-subtle hover:border-text"><span aria-hidden="true" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted">€</span></span></div></div></div>
+    <div class="flex flex-col items-center gap-2"><button type="button" id="continuer" data-continuer class="${btn('primary', 'lg', '!rounded-full !px-8')}" ${manque(a).length ? 'aria-disabled="true"' : ''}>Voir mes financements${icon('arrow-right', 'size-5')}</button><p id="etat" class="text-sm text-muted" aria-live="polite">${esc(etat(a))}</p></div></div>`
 }
+
 
 // ---------- Résultat ----------
 function resultat() {
@@ -85,27 +76,28 @@ function conseiller() {
   d.querySelector('#rappel').onclick = () => { d.close(); toast({ title: 'Demande de rappel enregistrée', description: 'Un conseiller vous appelle sous un jour ouvré.' }) }
 }
 
+
 // ---------- Rendu et événements ----------
 function rendre({ focus } = {}) {
   main.innerHTML = vue() === 'resultat' ? resultat() : question()
   if (focus === 'titre') { const h = $('h1', main); h?.focus({ preventScroll: true }); scrollTo(0, 0) }
   else if (focus) $(focus, main)?.focus({ preventScroll: true })
 }
-const avancer = () => { const s = S().step + 1; demande.set({ step: s }); if (s >= TOTAL) suivre('eligibilite_resultat'); rendre({ focus: 'titre' }) }
-const peutContinuer = () => { const { step, answers } = S(); const q = QUESTIONS[Math.min(step, TOTAL - 1)]; return answers[q.key] !== undefined }
+const avancer = () => { if (!complet()) return; demande.set({ step: TOTAL }); suivre('eligibilite_resultat'); rendre({ focus: 'titre' }) }
+const majCta = () => { const a = S().answers; $('#continuer')?.setAttribute('aria-disabled', String(manque(a).length > 0)); const e = $('#etat'); if (e) e.textContent = etat(a) }
+const choisir = (key, val) => { const q = QUESTIONS.find((x) => x.key === key), o = q.options.find((x) => String(x.value) === val); if (!o) return; demarre(); setReponse(key, o.value); rendre({ focus: `[data-key="${key}"][data-val="${val}"]` }) }
 const fixerMontant = (n) => {
   const q = QUESTIONS[3]; if (n !== undefined) { setReponse('montant', n); demarre() } else demande.set((s) => { const { montant, ...reste } = s.answers; return { answers: reste } })
   const j = $('#jauge'); if (j && n !== undefined) { j.value = Math.min(q.max, Math.max(q.min, n)); j.classList.remove('neutre'); j.style.setProperty('--p', `${((j.value - q.min) / (q.max - q.min)) * 100}%`); j.setAttribute('aria-valuetext', eur(n)) }
   const o = $('#montant-sortie'); if (o) o.innerHTML = n === undefined ? '<span class="text-subtle">— €</span>' : eur(n)
   $$('[data-preset]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.preset) === n)))
-  $('#continuer')?.setAttribute('aria-disabled', String(n === undefined)); $('#raison-montant') && ($('#raison-montant').hidden = n !== undefined)
+  majCta()
 }
 
 main.addEventListener('click', (e) => {
   const t = e.target
-  const choix = t.closest('[data-choix]'); if (choix) { const { step } = S(), q = QUESTIONS[step]; demarre(); setReponse(q.key, q.options[Number(choix.dataset.choix)].value); rendre({ focus: `[data-choix="${choix.dataset.choix}"]` }); return }
-  if (t.closest('[data-continuer]')) { if (peutContinuer()) avancer(); return }
-  if (t.closest('[data-retour]')) { demande.set((s) => ({ step: s.step - 1 })); rendre({ focus: 'titre' }); return }
+  const p = t.closest('[data-key]'); if (p) return choisir(p.dataset.key, p.dataset.val)
+  if (t.closest('[data-continuer]')) { avancer(); return }
   if (t.closest('[data-modifier]')) { demande.set({ step: 0 }); rendre({ focus: 'titre' }); return }
   if (t.closest('[data-conseiller]')) return conseiller()
   const pre = t.closest('[data-preset]'); if (pre) { const v = Number(pre.dataset.preset); fixerMontant(v); $('#saisie').value = v; return }
@@ -115,18 +107,12 @@ main.addEventListener('input', (e) => {
   if (e.target.id === 'jauge') { const v = Number(e.target.value); fixerMontant(v); $('#saisie').value = v }
   if (e.target.id === 'saisie') { const d = e.target.value.replace(/\D/g, '').slice(0, 8); e.target.value = d; fixerMontant(d ? Number(d) : undefined) }
 })
-// Clavier : 1 à 5 choisissent, Entrée valide la réponse présélectionnée, flèches dans le groupe de réponses.
+// Clavier : flèches dans un groupe de réponses (elles choisissent), Entrée dans le montant valide.
 addEventListener('keydown', (e) => {
-  if (e.metaKey || e.ctrlKey || e.altKey || document.querySelector('dialog[open]')) return
-  const { step } = S(), q = QUESTIONS[Math.min(step, TOTAL - 1)], tag = e.target.tagName
-  if (vue() !== 'question') return
-  if (e.key === 'Enter' && tag !== 'BUTTON' && tag !== 'A' && tag !== 'SELECT' && tag !== 'TEXTAREA') { if (peutContinuer()) { e.preventDefault(); avancer() } return }
-  if (/INPUT|TEXTAREA|SELECT/.test(tag)) return
-  if (q.kind === 'choice') {
-    const i = Number(e.key) - 1
-    if (i >= 0 && i < q.options.length) { e.preventDefault(); demarre(); setReponse(q.key, q.options[i].value); rendre({ focus: `[data-choix="${i}"]` }) }
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { const bs = $$('[data-choix]'), k = bs.indexOf(document.activeElement); if (k >= 0) { e.preventDefault(); bs[(k + (e.key === 'ArrowDown' ? 1 : bs.length - 1)) % bs.length].focus() } }
-  }
+  if (e.metaKey || e.ctrlKey || e.altKey || document.querySelector('dialog[open]') || vue() !== 'question') return
+  if (e.key === 'Enter' && e.target.id === 'saisie') { e.preventDefault(); avancer(); return }
+  const r = e.target.closest?.('[role=radio]'); if (!r || !/^Arrow/.test(e.key)) return
+  const bs = [...r.parentElement.querySelectorAll('[role=radio]')], i = bs.indexOf(r), d = /Right|Down/.test(e.key) ? 1 : -1; e.preventDefault()
+  const n = bs[(i + d + bs.length) % bs.length]; choisir(n.dataset.key, n.dataset.val)
 })
-demande.sub(() => { document.querySelectorAll('[data-montant]').forEach(() => {}) })
 rendre({ focus: 'titre' })

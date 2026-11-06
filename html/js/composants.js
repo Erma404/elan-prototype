@@ -17,7 +17,7 @@ export function valider(f, forceLourd) {
 }
 /** Zone de dépôt compacte : glisser-déposer, clic, clavier et photo (mobile). */
 export const zoneDepot = (label) => `<div data-depot><div data-zone class="tr flex flex-wrap items-center gap-x-4 gap-y-2 rounded-md border border-dashed border-border-strong bg-surface px-4 py-2.5">${icon('upload', 'size-5 shrink-0 text-muted')}<p class="min-w-[11rem] flex-1 text-sm text-muted"><span class="font-medium text-text">Glissez le fichier ici</span> ou choisissez-le. PDF, JPG, PNG, 10 Mo.</p><div class="flex flex-wrap justify-center gap-2"><button type="button" data-choisir class="${btn('secondary', 'sm')}">Choisir un fichier<span class="sr-only"> pour ${esc(label)}</span></button><button type="button" data-photo class="${btn('ghost', 'sm')}">${icon('camera')}Photo<span class="sr-only"> pour ${esc(label)}</span></button></div><input type="file" data-fichier accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" class="sr-only" tabindex="-1" aria-hidden="true"><input type="file" data-camera accept="image/*" capture="environment" class="sr-only" tabindex="-1" aria-hidden="true"></div><p data-erreur-depot role="alert" class="mt-2 text-sm font-medium text-danger" hidden></p></div>`
-export function brancherDepot(racine, { onFile, forceLourd = () => 0 }) {
+export function brancherDepot(racine, { onFile, onMulti, forceLourd = () => 0 }) {
   $$z(racine).forEach((d) => {
     const zone = d.querySelector('[data-zone]'), err = d.querySelector('[data-erreur-depot]')
     const prendre = (f) => { if (!f) return; const pb = valider(f, forceLourd()); if (pb) { err.innerHTML = `${esc(pb)} <a href="https://www.ilovepdf.com/fr/jpg_en_pdf" target="_blank" rel="noreferrer" class="underline underline-offset-2">Convertir mon fichier</a>`; err.hidden = false; return } err.hidden = true; onFile(f) }
@@ -26,7 +26,7 @@ export function brancherDepot(racine, { onFile, forceLourd = () => 0 }) {
     for (const s of ['[data-fichier]', '[data-camera]']) d.querySelector(s).onchange = (e) => { prendre(e.target.files[0]); e.target.value = '' }
     zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('border-accent', 'bg-accent-soft') }
     zone.ondragleave = () => zone.classList.remove('border-accent', 'bg-accent-soft')
-    zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('border-accent', 'bg-accent-soft'); prendre(e.dataTransfer.files[0]) }
+    zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('border-accent', 'bg-accent-soft'); if (e.dataTransfer.files.length > 1 && onMulti) return onMulti([...e.dataTransfer.files]); prendre(e.dataTransfer.files[0]) }
   })
 }
 const $$z = (r) => [...r.querySelectorAll('[data-depot]')]

@@ -3,7 +3,7 @@ import { chromium } from '@playwright/test';
 const base = process.env.BASE || 'http://127.0.0.1:5180';
 const answers = { projet: 'equipement', effectif: 3, anciennete: 4, montant: 80000, secteur: 'artisanat' };
 const cas = [
-  { nom: 'éligibilité, question 1', path: '/eligibilite', ls: {} },
+  { nom: 'éligibilité, formulaire', path: '/eligibilite', ls: {} },
   { nom: 'éligibilité, résultat', path: '/eligibilite', ls: { 'elan:demande:html': { answers, step: 5, financementId: null } } },
   { nom: 'pièces, premier accès', path: '/demande/pieces', ls: {} },
   { nom: 'récapitulatif', path: '/demande/recapitulatif', ls: {} },

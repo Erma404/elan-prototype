@@ -15,7 +15,7 @@ if (new URLSearchParams(location.search).has('depuis-accueil')) { ui.set({ perso
 const racine = $('#racine'); racine.className = 'relative flex min-h-dvh flex-col bg-bg text-text'; document.title = 'Bonjour · Élan'
 function rendre() {
   const id = ui.get().persona in PROFILS ? ui.get().persona : 'fabienne', p = PROFILS[id]
-  const commence = id === 'fabienne' && (Object.keys(pieces.get().etat).some((k) => complete(pieces.get().etat[k].statut)) || demande.get().step > 0)
+  const commence = id === 'fabienne' && (Object.keys(pieces.get().etat).some((k) => complete(pieces.get().etat[k].statut)) || demande.get().step > 0 || demande.get().answers.montant !== undefined)
   racine.innerHTML = `<a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-demo)] focus:rounded-sm focus:bg-text focus:px-4 focus:py-2 focus:text-bg">Aller au contenu</a>
   <header class="mx-auto flex h-20 w-full max-w-[88rem] items-center justify-between px-5 sm:px-8"><a href="/" aria-label="Élan, accueil">${logo('wordmark', 'h-8')}</a><div class="flex items-center gap-2">${boutonDemo()}${boutonProfil()}</div></header>
   <main id="contenu" class="mx-auto flex w-full max-w-[64rem] flex-1 flex-col justify-center px-5 pb-16 sm:px-8">${avatar(id, 'size-20')}

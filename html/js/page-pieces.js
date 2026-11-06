@@ -2,6 +2,7 @@
 import { $, $$, esc, btn, modale, tiroir, toast, banniere, badge, badgeStatut, anneau, STATUTS, annoncer } from './core.js'
 import { icon } from './icons.js'
 import { monterCoque } from './shell.js'
+import { ouvrirDepotGroupe } from './depot-groupe.js'
 import { demande, pieces, patch, deposer, annulerDepot, inviter, revoquer, suivre, relances, ajouterRelance, eur } from './state.js'
 import { PIECES, GROUPES, complete, compter } from './pieces.js'
 import { financements } from './engine.js'
@@ -72,7 +73,7 @@ function entete() {
   const st = pieces.get(), a = demande.get().answers, c = compter(st.etat)
   const f = financements.find((x) => x.id === (demande.get().financementId ?? 'pret-equipement-artisans'))
   const consigne = c.manquantes.length > 0 ? `Déposez les pièces obligatoires : il en reste ${c.manquantes.length}. Quand elles sont prêtes, l’envoi se débloque.` : c.aCorriger.length ? 'Une pièce est à corriger. Vous pouvez la remplacer, ou envoyer quand même.' : 'Toutes les pièces obligatoires sont prêtes. Vous pouvez envoyer votre demande.'
-  return `<header class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1"><div><h1 class="text-[clamp(1.5rem,2.4vw,2.125rem)] font-bold leading-tight tracking-tighter">${esc(f.nom)}<span class="font-normal text-muted">, ${esc(st.objet.toLowerCase())}${a.montant !== undefined ? `, <span class="tabular">${eur(a.montant)}</span>` : ''}</span></h1><p class="mt-1 text-[0.9375rem] text-muted" aria-live="polite">${consigne}</p></div><p class="tabular pb-1 text-sm text-subtle" role="status">${st.hors_ligne ? 'Enregistré sur cet appareil' : `Enregistré à ${st.savedAt}`}</p></header>`
+  return `<header class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1"><div><h1 class="text-[clamp(1.5rem,2.4vw,2.125rem)] font-bold leading-tight tracking-tighter">${esc(f.nom)}<span class="font-normal text-muted">, ${esc(st.objet.toLowerCase())}${a.montant !== undefined ? `, <span class="tabular">${eur(a.montant)}</span>` : ''}</span></h1><p class="mt-1 text-[0.9375rem] text-muted" aria-live="polite">${consigne}</p></div><div class="flex items-center gap-4 pb-1"><button type="button" data-groupe class="${btn(c.faites === 0 ? 'primary' : 'secondary', 'sm', '!rounded-full')}">${icon('upload')}Déposer plusieurs documents</button><p class="tabular text-sm text-subtle" role="status">${st.hors_ligne ? 'Enregistré sur cet appareil' : `Enregistré à ${st.savedAt}`}</p></div></header>`
 }
 function bannieres() {
   const st = pieces.get(); return [st.envoyeLe ? banniere({ ton: 'info', titre: 'Votre demande est envoyée', corps: 'Vous pouvez encore remplacer, retirer ou ajouter une pièce. Votre chargé d’affaires est prévenu de chaque changement.', action: `<a href="/demande/envoyee" class="${btn('secondary', 'sm')}">Voir le suivi</a>` }) : '', st.hors_ligne ? banniere({ ton: 'warning', titre: 'Connexion perdue', corps: 'Vous pouvez continuer : tout est gardé sur cet appareil et partira au retour du réseau.' }) : '', st.erreur === 'reseau' ? banniere({ ton: 'danger', titre: 'Réseau instable (démonstration)', corps: 'Les prochains dépôts échoueront, avec la possibilité de réessayer.' }) : ''].join('')
@@ -84,10 +85,11 @@ function rendreTout() {
   avecFocus(() => {
     if (!$('#squelette')) main.innerHTML = `<div id="squelette" class="flex h-full min-h-0 flex-col gap-4"><div id="entete"></div><div id="bannieres" class="flex flex-col gap-3 empty:hidden"></div><div class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[19.5rem_minmax(0,1fr)_21rem]"><div id="liste" class="min-h-0"></div><div id="detail" class="min-h-0"></div><aside id="lateral" aria-label="Avancement de la demande" class="min-h-0"></aside></div></div>`
     $('#entete').innerHTML = entete(); $('#bannieres').innerHTML = bannieres(); $('#liste').innerHTML = liste(); $('#detail').innerHTML = detail(); $('#lateral').innerHTML = lateral()
-    brancherDepot($('#detail'), { onFile: (f) => { remplacer = false; retire = null; prevenir(E()[selection].fichier ? 'remplacé une pièce' : 'ajouté une pièce'); deposer(selection, f.name, f.size, f) }, forceLourd: () => (pieces.get().erreur === 'fichier-lourd' ? 14900000 : 0) })
+    brancherDepot($('#detail'), { onMulti: (fs) => ouvrirDepotGroupe(fs, { apres: apresGroupe }), onFile: (f) => { remplacer = false; retire = null; prevenir(E()[selection].fichier ? 'remplacé une pièce' : 'ajouté une pièce'); deposer(selection, f.name, f.size, f) }, forceLourd: () => (pieces.get().erreur === 'fichier-lourd' ? 14900000 : 0) })
     bouton()
   })
 }
+const apresGroupe = (ids) => { if (pieces.get().envoyeLe) for (const id of ids) ajouterRelance('modification', `Fabienne M. a ajouté une pièce : ${PIECES.find((p) => p.id === id).nom}.`); if (ids[0]) choisir(ids[0]) }
 const prevenir = (quoi) => { if (pieces.get().envoyeLe) ajouterRelance('modification', `Fabienne M. a ${quoi} : ${PIECES.find((p) => p.id === selection).nom}.`) }
 function bouton() {
   let b = $('#bouton-assistant'); if (!iaActive()) return b?.remove()
@@ -97,6 +99,7 @@ function bouton() {
 // ---------- Interactions (délégation) ----------
 main.addEventListener('click', (e) => {
   const t = e.target, s = E()[selection], p = PIECES.find((x) => x.id === selection)
+  if (t.closest('[data-groupe]')) return ouvrirDepotGroupe([], { apres: apresGroupe })
   const pc = t.closest('[data-piece]'); if (pc) return choisir(pc.dataset.piece)
   if (t.closest('[data-suivante]')) { const n = suivante(); return n.url ? (location.href = n.url) : choisir(n.id) }
   if (t.closest('[data-remplacer]')) { remplacer = !remplacer; return rendreTout() }
