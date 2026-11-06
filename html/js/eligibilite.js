@@ -1,4 +1,4 @@
-// Écran 1 : pré-éligibilité. Les cinq réponses tiennent sur un seul écran ; un seul clic pour voir le résultat.
+// Écran 1 : pré-éligibilité. Une question par écran, pas à pas (aucune avance automatique).
 import { $, $$, esc, btn, modale, toast, pictogramme } from './core.js'
 import { icon } from './icons.js'
 import { monterCoque } from './shell.js'
@@ -6,7 +6,6 @@ import { demande, setReponse, suivre, eur } from './state.js'
 import { QUESTIONS } from './questions.js'
 import { retenus, ecartes, leCritereManquant, explicationTete, alternatives, REFERENTIEL } from './engine.js'
 
-const LABELS = { projet: 'Votre projet', effectif: 'Votre équipe', anciennete: 'Son ancienneté', secteur: 'Votre secteur', montant: 'Montant souhaité' }
 
 const TOTAL = QUESTIONS.length
 // « Recommencer » depuis l’écran Bonjour : réponses effacées, retour à la question 1.
@@ -30,23 +29,24 @@ function panneau() {
 const majPanneau = () => { const p = $('#panneau'); if (p) p.innerHTML = panneau() }
 demande.sub(() => { majPanneau() })
 
-// ---------- Formulaire : une seule page ----------
-const puce = (q, o, sel, premier) => `<button type="button" role="radio" aria-checked="${sel}" tabindex="${sel || premier ? 0 : -1}" data-key="${q.key}" data-val="${esc(String(o.value))}" class="tr inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-[0.9375rem] font-medium active:scale-[0.98] ${sel ? 'border-text bg-text text-bg' : 'border-border-strong bg-surface hover:border-text'}">${o.icon ? pictogramme(o.icon, 'size-4') : ''}${esc(o.label)}</button>`
-const groupe = (q, answers) => `<div role="radiogroup" aria-labelledby="g-${q.key}"><p id="g-${q.key}" class="mb-2 text-sm font-medium text-muted">${LABELS[q.key]}</p><div class="flex flex-wrap gap-2">${q.options.map((o, i) => puce(q, o, answers[q.key] === o.value, answers[q.key] === undefined && i === 0)).join('')}</div></div>`
-const manque = (a) => QUESTIONS.filter((q) => a[q.key] === undefined).map((q) => LABELS[q.key].toLowerCase())
-const etat = (a) => { const m = manque(a); if (m.length) return `Il reste à renseigner : ${m.join(', ')}.`; const n = retenus(a).filter((e) => e.statut === 'possible').length; return n > 0 ? `${n} financement${n > 1 ? 's' : ''} possible${n > 1 ? 's' : ''} pour l’instant.` : 'Aucun financement ne correspond pour l’instant.' }
+// ---------- Une question par écran ----------
+const carte = (o, i, sel) => `<button type="button" role="radio" aria-checked="${sel}" data-choix="${i}" class="tr flex min-h-14 w-full cursor-pointer items-center gap-4 rounded-full border px-6 py-2 text-left active:scale-[0.99] ${sel ? 'border-text bg-text text-bg' : 'border-border-strong bg-surface hover:border-text'}">${o.icon ? pictogramme(o.icon, 'size-5 shrink-0') : ''}<span class="flex-1"><span class="block font-semibold tracking-tight">${esc(o.label)}</span>${o.description ? `<span class="block text-sm leading-snug ${sel ? 'text-bg/70' : 'text-muted'}">${esc(o.description)}</span>` : ''}</span><span aria-hidden="true" class="grid size-6 shrink-0 place-items-center rounded-full border ${sel ? 'border-bg' : 'border-border-strong'}">${sel ? icon('check', 'size-4') : ''}</span></button>`
 
 function question() {
-  const a = S().answers, qs = Object.fromEntries(QUESTIONS.map((q) => [q.key, q])), qm = qs.montant, m = a.montant
-  return `<div class="mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col justify-center gap-6 py-2">
-    <div class="text-center"><h1 id="question" tabindex="-1" class="text-[clamp(2rem,4vw,3.25rem)] font-light leading-[1.04] tracking-[-0.03em] outline-none">Parlez-nous de votre projet.</h1><p class="mt-3 text-lg text-muted">Cinq réponses, et vous saurez si vous avez votre chance.</p></div>
-    <div class="grid gap-x-12 gap-y-5 lg:grid-cols-2"><div class="flex flex-col gap-5">${groupe(qs.projet, a)}${groupe(qs.secteur, a)}</div><div class="flex flex-col gap-5">${groupe(qs.effectif, a)}${groupe(qs.anciennete, a)}</div></div>
-    <div class="grid items-center gap-x-10 gap-y-3 rounded-card bg-bg-soft px-6 py-4 lg:grid-cols-[auto_minmax(0,1fr)]"><div><p id="g-montant" class="text-sm font-medium text-muted">${LABELS.montant}</p><p class="tabular text-[clamp(2rem,3.4vw,2.75rem)] font-bold leading-none tracking-tighter"><output id="montant-sortie" aria-live="polite">${m === undefined ? '<span class="text-subtle">— €</span>' : eur(m)}</output></p></div>
-      <div><label for="jauge" class="sr-only">Montant recherché</label><input id="jauge" type="range" min="${qm.min}" max="${qm.max}" step="${qm.step}" value="${m ?? qm.min}" class="jauge-plage ${m === undefined ? 'neutre' : ''}" style="--p:${(((m ?? qm.min) - qm.min) / (qm.max - qm.min)) * 100}%" aria-valuetext="${m === undefined ? 'Aucun montant choisi' : eur(m)}" />
-        <div class="mt-2 flex flex-wrap items-center gap-2" role="group" aria-label="Montants courants">${qm.presets.map((v) => `<button type="button" data-preset="${v}" aria-pressed="${m === v}" class="tr inline-flex min-h-9 cursor-pointer items-center rounded-full border px-3.5 text-sm font-medium hover:border-text aria-pressed:border-text aria-pressed:bg-text aria-pressed:text-bg border-border-strong bg-surface">${eur(v)}</button>`).join('')}<label for="saisie" class="sr-only">Montant exact, en euros</label><span class="relative"><input id="saisie" inputmode="numeric" autocomplete="off" placeholder="Autre montant" value="${m ?? ''}" class="tr tabular h-9 w-36 rounded-full border border-border-strong bg-surface px-3.5 pr-8 text-sm placeholder:text-subtle hover:border-text"><span aria-hidden="true" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted">€</span></span></div></div></div>
-    <div class="flex flex-col items-center gap-2"><button type="button" id="continuer" data-continuer class="${btn('primary', 'lg', '!rounded-full !px-8')}" ${manque(a).length ? 'aria-disabled="true"' : ''}>Voir mes financements${icon('arrow-right', 'size-5')}</button><p id="etat" class="text-sm text-muted" aria-live="polite">${esc(etat(a))}</p></div></div>`
+  const { step, answers } = S(), q = QUESTIONS[Math.min(step, TOTAL - 1)], m = answers.montant
+  const points = QUESTIONS.map((x, i) => `<span class="h-1 w-8 rounded-full tr ${i <= step ? 'bg-text' : 'bg-border'}"></span>`).join('')
+  const ok = answers[q.key] !== undefined
+  let corps
+  if (q.kind === 'choice') corps = `<div role="radiogroup" aria-labelledby="question" class="mx-auto mt-7 flex w-full max-w-lg flex-col gap-2">${q.options.map((o, i) => carte(o, i, answers[q.key] === o.value)).join('')}</div>`
+  else corps = `<div class="mx-auto mt-7 w-full max-w-xl"><p class="tabular text-center text-[clamp(2.75rem,6vw,4.5rem)] font-light leading-none tracking-tighter"><output id="montant-sortie" aria-live="polite">${m === undefined ? '<span class="text-subtle">— €</span>' : eur(m)}</output></p>
+    <div class="mt-6"><label for="jauge" class="sr-only">Montant recherché</label><input id="jauge" type="range" min="${q.min}" max="${q.max}" step="${q.step}" value="${m ?? q.min}" class="jauge-plage ${m === undefined ? 'neutre' : ''}" style="--p:${(((m ?? q.min) - q.min) / (q.max - q.min)) * 100}%" aria-valuetext="${m === undefined ? 'Aucun montant choisi' : eur(m)}" /></div>
+    <div class="mt-4 flex flex-wrap items-center justify-center gap-2" role="group" aria-label="Montants courants">${q.presets.map((v) => `<button type="button" data-preset="${v}" aria-pressed="${m === v}" class="tr inline-flex min-h-10 cursor-pointer items-center rounded-full border px-4 text-sm font-medium hover:border-text aria-pressed:border-text aria-pressed:bg-text aria-pressed:text-bg border-border-strong bg-surface">${eur(v)}</button>`).join('')}<label for="saisie" class="sr-only">Montant exact, en euros</label><span class="relative"><input id="saisie" inputmode="numeric" autocomplete="off" placeholder="Autre montant" value="${m ?? ''}" class="tr tabular h-10 w-40 rounded-full border border-border-strong bg-surface px-4 pr-9 text-sm placeholder:text-subtle hover:border-text"><span aria-hidden="true" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted">€</span></span></div></div>`
+  return `<section aria-labelledby="question" class="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col justify-center py-2 text-center">
+    <div class="flex items-center justify-center gap-3" role="progressbar" aria-label="Progression du test" aria-valuemin="1" aria-valuemax="${TOTAL}" aria-valuenow="${step + 1}"><span class="tabular text-sm text-muted">${step + 1} sur ${TOTAL}</span><span class="flex gap-1.5">${points}</span></div>
+    <h1 id="question" tabindex="-1" class="mt-5 text-[clamp(1.875rem,3.6vw,3rem)] font-light leading-[1.06] tracking-[-0.03em] outline-none">${esc(q.titre)}</h1><p class="mt-2 text-lg text-muted">${esc(q.aide)}</p>${corps}
+    <div class="mt-7 flex flex-wrap items-center justify-center gap-3">${step > 0 ? `<button type="button" data-retour class="${btn('ghost', 'lg', '!rounded-full')}">${icon('arrow-left')}Retour</button>` : ''}<button type="button" id="continuer" data-continuer data-guide class="${btn('primary', 'lg', '!rounded-full !px-8')}" ${ok ? '' : 'aria-disabled="true" title="Choisissez une réponse pour continuer."'}>${step === TOTAL - 1 ? 'Voir mes financements' : 'Continuer'}${icon('arrow-right', 'size-5')}</button></div>
+    <p id="etat" class="mt-3 min-h-5 text-sm text-muted" aria-live="polite">${ok ? '' : q.kind === 'slider' ? 'Choisissez ou saisissez un montant pour continuer.' : 'Choisissez une réponse pour continuer.'}</p></section>`
 }
-
 
 // ---------- Résultat ----------
 function resultat() {
@@ -83,9 +83,11 @@ function rendre({ focus } = {}) {
   if (focus === 'titre') { const h = $('h1', main); h?.focus({ preventScroll: true }); scrollTo(0, 0) }
   else if (focus) $(focus, main)?.focus({ preventScroll: true })
 }
-const avancer = () => { if (!complet()) return; demande.set({ step: TOTAL }); suivre('eligibilite_resultat'); rendre({ focus: 'titre' }) }
-const majCta = () => { const a = S().answers; $('#continuer')?.setAttribute('aria-disabled', String(manque(a).length > 0)); const e = $('#etat'); if (e) e.textContent = etat(a) }
-const choisir = (key, val) => { const q = QUESTIONS.find((x) => x.key === key), o = q.options.find((x) => String(x.value) === val); if (!o) return; demarre(); setReponse(key, o.value); rendre({ focus: `[data-key="${key}"][data-val="${val}"]` }) }
+const avancer = () => {
+  if (!peutContinuer()) { const e = $('#etat'); if (e) { e.classList.add('font-semibold', 'text-text'); e.classList.remove('text-muted') } return }
+  const n = S().step + 1; demande.set({ step: n }); if (n >= TOTAL) suivre('eligibilite_resultat'); rendre({ focus: 'titre' }) }
+const peutContinuer = () => { const { step, answers } = S(); return answers[QUESTIONS[Math.min(step, TOTAL - 1)].key] !== undefined }
+const majCta = () => { const ok = peutContinuer(); $('#continuer')?.setAttribute('aria-disabled', String(!ok)); const e = $('#etat'); if (e) e.textContent = ok ? '' : 'Choisissez ou saisissez un montant pour continuer.' }
 const fixerMontant = (n) => {
   const q = QUESTIONS[3]; if (n !== undefined) { setReponse('montant', n); demarre() } else demande.set((s) => { const { montant, ...reste } = s.answers; return { answers: reste } })
   const j = $('#jauge'); if (j && n !== undefined) { j.value = Math.min(q.max, Math.max(q.min, n)); j.classList.remove('neutre'); j.style.setProperty('--p', `${((j.value - q.min) / (q.max - q.min)) * 100}%`); j.setAttribute('aria-valuetext', eur(n)) }
@@ -96,8 +98,9 @@ const fixerMontant = (n) => {
 
 main.addEventListener('click', (e) => {
   const t = e.target
-  const p = t.closest('[data-key]'); if (p) return choisir(p.dataset.key, p.dataset.val)
+  const choix = t.closest('[data-choix]'); if (choix) { const q = QUESTIONS[S().step]; demarre(); setReponse(q.key, q.options[Number(choix.dataset.choix)].value); rendre({ focus: `[data-choix="${choix.dataset.choix}"]` }); return }
   if (t.closest('[data-continuer]')) { avancer(); return }
+  if (t.closest('[data-retour]')) { demande.set((s) => ({ step: s.step - 1 })); rendre({ focus: 'titre' }); return }
   if (t.closest('[data-modifier]')) { demande.set({ step: 0 }); rendre({ focus: 'titre' }); return }
   if (t.closest('[data-conseiller]')) return conseiller()
   const pre = t.closest('[data-preset]'); if (pre) { const v = Number(pre.dataset.preset); fixerMontant(v); $('#saisie').value = v; return }
@@ -107,12 +110,16 @@ main.addEventListener('input', (e) => {
   if (e.target.id === 'jauge') { const v = Number(e.target.value); fixerMontant(v); $('#saisie').value = v }
   if (e.target.id === 'saisie') { const d = e.target.value.replace(/\D/g, '').slice(0, 8); e.target.value = d; fixerMontant(d ? Number(d) : undefined) }
 })
-// Clavier : flèches dans un groupe de réponses (elles choisissent), Entrée dans le montant valide.
+// Clavier : 1 à 5 choisissent, Entrée valide la réponse présélectionnée, flèches dans le groupe de réponses.
 addEventListener('keydown', (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey || document.querySelector('dialog[open]') || vue() !== 'question') return
-  if (e.key === 'Enter' && e.target.id === 'saisie') { e.preventDefault(); avancer(); return }
-  const r = e.target.closest?.('[role=radio]'); if (!r || !/^Arrow/.test(e.key)) return
-  const bs = [...r.parentElement.querySelectorAll('[role=radio]')], i = bs.indexOf(r), d = /Right|Down/.test(e.key) ? 1 : -1; e.preventDefault()
-  const n = bs[(i + d + bs.length) % bs.length]; choisir(n.dataset.key, n.dataset.val)
+  const { step } = S(), q = QUESTIONS[Math.min(step, TOTAL - 1)], tag = e.target.tagName
+  if (e.key === 'Enter' && tag !== 'BUTTON' && tag !== 'A') { if (peutContinuer()) { e.preventDefault(); avancer() } return }
+  if (/INPUT|TEXTAREA|SELECT/.test(tag)) return
+  if (q.kind === 'choice') {
+    const i = Number(e.key) - 1
+    if (i >= 0 && i < q.options.length) { e.preventDefault(); demarre(); setReponse(q.key, q.options[i].value); rendre({ focus: `[data-choix="${i}"]` }) }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { const bs = $$('[data-choix]'), k = bs.indexOf(document.activeElement); if (k >= 0) { e.preventDefault(); bs[(k + (e.key === 'ArrowDown' ? 1 : bs.length - 1)) % bs.length].focus() } }
+  }
 })
 rendre({ focus: 'titre' })

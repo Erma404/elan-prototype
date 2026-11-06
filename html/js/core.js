@@ -93,7 +93,7 @@ const TAILLE = { sm: 'h-10 px-4 text-sm', md: 'h-12 px-6 text-base', lg: 'h-14 p
 export const btn = (v = 'primary', t = 'md', plus = '') => cn(`tr ${plus.split(' ').includes('hidden') ? '' : 'inline-flex'} cursor-pointer select-none items-center justify-center gap-2 rounded-md font-semibold tracking-tight [touch-action:manipulation] active:scale-[0.98] aria-disabled:cursor-not-allowed aria-disabled:opacity-45`, VAR[v], TAILLE[t], plus)
 
 // Un bouton aria-disabled reste focalisable (la raison reste lisible) mais n'agit pas.
-document.addEventListener('click', (e) => { const b = e.target.closest('[aria-disabled="true"]'); if (b) { e.preventDefault(); e.stopImmediatePropagation() } }, true)
+document.addEventListener('click', (e) => { const b = e.target.closest('[aria-disabled="true"]'); if (b && !b.hasAttribute('data-guide')) { e.preventDefault(); e.stopImmediatePropagation() } }, true)
 
 // ---------- Badges de statut : icône et texte, jamais la couleur seule ----------
 export const STATUTS = {

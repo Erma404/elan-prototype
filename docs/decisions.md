@@ -202,3 +202,8 @@ Format : contexte, options, choix, raison.
 - **Panneau « Financements possibles » retiré** de cet écran : le compte se lit sous le bouton (« 2 financements possibles pour l'instant »).
 - **Dépôt groupé** (écran Pièces) : bouton « Déposer plusieurs documents », ou glisser plusieurs fichiers d'un coup. L'assistant propose le classement d'après le nom des fichiers (Kbis, identité, RIB, statuts, bilans, liasse, attestation, devis, plan), l'utilisateur vérifie, change au besoin, puis valide en un clic. Rien n'est déposé avant la validation. Deux fichiers pour la même pièce : le second reste « à associer ». Format ou poids refusé : message précis, fichier exclu. Assistant indisponible : aucun classement proposé, association à la main. Principe conservé : l'IA prépare, l'humain valide ; elle ne bloque jamais.
 - **Limite connue** : le classement se base sur le nom du fichier, pas sur son contenu. Une vraie lecture du contenu relève de la vague 2 (vérification IA, E2.9).
+
+## D35 · Retour à une question par écran, dans le style de la home (2026-11-06)
+- Retour utilisateur sur le formulaire en une page : « 1 question = 1 écran ». D34 (éligibilité en une page) est annulé pour cette partie. Le dépôt groupé des pièces est conservé.
+- Chaque question est un écran centré : progression discrète « 2 sur 5 », grand titre léger, réponses en pastilles arrondies pleine largeur, un bouton rond « Continuer » (« Voir mes financements » à la dernière). Toujours aucune avance automatique après une réponse. Retour possible, Entrée valide, touches 1 à 5 choisissent, flèches dans le groupe. Le montant reste visible dans l'en-tête.
+- Le panneau latéral « Financements possibles » reste retiré (écran plus épuré).

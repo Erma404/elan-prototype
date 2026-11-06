@@ -19,7 +19,7 @@ Tous les tests s'exécutent contre le site HTML servi localement (`node scripts/
 | « Recommencer » (écran Bonjour) : réponses effacées, retour à la question 1 | `verif` §12 | OK |
 | Minuscule après les deux-points (récapitulatif, message de relance) | `verif` §12 | OK |
 | Journal de Nicolas après un vrai usage de l'assistant par Fabienne (question posée, envoi, lecture du journal) | `verif` §13 | OK |
-| Éligibilité en une page : bouton grisé avec raison, flèches, 5 réponses puis un seul clic | `verif` §7 | OK |
+| Éligibilité, une question par écran : une seule question affichée, Entrée valide, bouton grisé avec raison | `verif` §7 | OK |
 | Dépôt groupé : classement proposé, doublon, fichier trop lourd, rien déposé avant validation, 4 pièces vérifiées d'un coup, assistant indisponible | `verif` §14 | OK |
 | axe-core, 9 routes × clair/sombre × 1440/390 px | `npm run axe` | zéro violation |
 | Lighthouse, 8 routes | `npx lighthouse` | 100 / 100 / 100, LCP 1,1 à 1,2 s, CLS ≤ 0,002 (relancé sur 6 routes après ces corrections : 100 / 100 / 100) |
